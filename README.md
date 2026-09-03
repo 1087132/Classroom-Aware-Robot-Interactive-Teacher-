@@ -68,6 +68,44 @@ files, download a template, or generate a lesson from a textbook PDF. The PDF
 pipeline extracts text, removes workbook noise, creates a local knowledge base,
 and uses the local LLM to draft grounded multiple-choice questions that the
 teacher previews before accepting.
+File Layout 
+classroom-robot-teacher/
+├── backend/                    # Python FastAPI server
+│   ├── main.py                 # App entry, routes, WebSocket
+│   ├── database.py             # SQLite schema and queries
+│   ├── auth.py                 # Teacher login and sessions
+│   ├── analytics.py            # Engagement score computation
+│   ├── lesson_engine.py        # Lesson state and pacing
+│   ├── perception.py           # Camera/gaze and simulated attention
+│   ├── llm.py                  # Constrained local LLM client
+│   ├── tts.py                  # Text-to-speech (Kokoro + fallback)
+│   ├── textbook.py             # PDF extraction and MCQ generation
+│   └── lessons/                # Built-in and uploaded lesson JSONs
+├── frontend/                   # HTML/CSS/JS UI
+│   ├── index.html              # Landing + QR code
+│   ├── login.html              # Teacher login
+│   ├── teacher.html            # Teacher dashboard
+│   ├── tracking.html           # Live + history tracking
+│   ├── student.html            # Student app
+│   ├── robot.html              # Robot face
+│   ├── projector.html          # Projector view
+│   ├── manifest.json           # PWA manifest
+│   ├── sw.js                   # Service worker
+│   └── static/
+│       ├── style.css           # Shared design system
+│       ├── common.js           # Shared helpers and PWA setup
+│       ├── offline.html        # Offline fallback
+│       └── icons/              # App icons
+├── data/                       # Runtime data
+│   ├── cat.db                  # SQLite database
+│   └── tts/                    # Kokoro TTS model files
+├── README.md                   # Original project README
+├── README_GITHUB.md            # Polished GitHub description
+├── Dockerfile                  # Container build
+├── docker-compose.yml          # Docker stack
+├── docker-entrypoint.sh        # Container startup
+├── requirements.txt            # Python dependencies
+└── run.sh                      # Native macOS/Linux launcher
 
 ### Engagement analytics
 
