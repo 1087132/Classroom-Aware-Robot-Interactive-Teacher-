@@ -1,0 +1,43 @@
+# CAT - Classroom-Aware Interactive Robot Teacher
+#
+#   docker compose up -d          -> app on http://localhost:8000
+#   docker compose logs -f cat    -> watch the app
+#
+# Set CAT_PUBLIC_HOST to THIS machine's LAN IP so student QR codes work
+# from phones, e.g.:  CAT_PUBLIC_HOST=192.168.0.139 docker compose up -d
+
+services:
+  cat:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_URL=http://ollama:11434        # local LLM (offline)
+      - CAT_PUBLIC_HOST=${CAT_PUBLIC_HOST:-}  # your LAN IP for QR codes
+    volumes:
+      - cat_data:/app/data                    # DB, uploads, voice model
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_models:/root/.ollama           # downloaded LLM models
+    restart: unless-stopped
+
+  # one-shot: downloads the LLM into the volume on first start, then exits
+  ollama-init:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    volumes:
+      - ollama_models:/root/.ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: ["/bin/sh", "-c", "sleep 3 && ollama pull llama3.2:3b || true"]
+    restart: "no"
+
+volumes:
+  cat_data:
+  ollama_models:

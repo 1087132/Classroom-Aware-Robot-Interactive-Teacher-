@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CAT - Robot Face</title>
+<link rel="stylesheet" href="/static/style.css?v=22" />
+<style>
+  body { overflow: hidden; background: #05070f; }
+  .stagefx {
+    position: fixed; inset: 0;
+    background: radial-gradient(900px 500px at 50% 35%, #101c38 0%, #05070f 70%);
+  }
+  .face-wrap {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 40px;
+  }
+  .face { position: relative; width: min(72vw, 560px); }
+
+  .eyes { display: flex; justify-content: space-between; width: 100%; }
+  .eye {
+    width: 30%; aspect-ratio: 0.82;
+    background: linear-gradient(180deg, #67e8f9 0%, #22d3ee 60%, #0891b2 100%);
+    border-radius: 26%;
+    box-shadow: 0 0 60px rgba(34, 211, 238, 0.55), 0 0 120px rgba(34, 211, 238, 0.25);
+    transition: all 0.25s ease;
+    transform-origin: center;
+  }
+  .brow {
+    position: absolute; top: -14%; width: 30%; height: 7%;
+    background: #22d3ee; border-radius: 999px; opacity: 0;
+    transition: all 0.25s ease;
+  }
+  .brow.l { left: 0; } .brow.r { right: 0; }
+
+  .mouth-area { display: flex; justify-content: center; margin-top: 14%; height: 90px; }
+  .mouth {
+    width: 34%; height: 26px;
+    border-radius: 999px;
+    background: #22d3ee;
+    box-shadow: 0 0 40px rgba(34, 211, 238, 0.4);
+    transition: all 0.25s ease;
+  }
+
+  /* ---- expressions ---- */
+  .blink .eye { transform: scaleY(0.08); }
+
+  .exp-happy .eye { border-radius: 50% 50% 20% 20%; transform: scaleY(.72) translateY(14%); }
+  .exp-happy .mouth { width: 44%; height: 56px; border-radius: 0 0 999px 999px; }
+
+  .exp-greeting .eye { border-radius: 50% 50% 24% 24%; transform: scaleY(.8); }
+  .exp-greeting .mouth { width: 48%; height: 60px; border-radius: 0 0 999px 999px; }
+
+  .exp-excited .eye { transform: scale(1.06); border-radius: 50%; }
+  .exp-excited .mouth { width: 30%; height: 74px; border-radius: 46%; background: #0e7490;
+    border: 10px solid #22d3ee; }
+
+  .exp-curious .eye:first-child { transform: scaleY(1.06); }
+  .exp-curious .eye:last-child { transform: scaleY(0.62) translateY(20%); }
+  .exp-curious .brow.l { opacity: 1; transform: translateY(-10px) rotate(-8deg); }
+  .exp-curious .mouth { width: 22%; height: 22px; }
+
+  .exp-thinking .eye { transform: scaleY(.55) translateY(10%); border-radius: 40%; }
+  .exp-thinking .mouth { width: 20%; height: 16px; transform: translateX(30%) rotate(-6deg); }
+
+  .exp-encouraging .eye { border-radius: 46% 46% 24% 24%; transform: scaleY(.85); }
+  .exp-encouraging .mouth { width: 38%; height: 40px; border-radius: 0 0 999px 999px; }
+
+  .exp-concerned .eye { transform: scaleY(.75); }
+  .exp-concerned .brow { opacity: 1; }
+  .exp-concerned .brow.l { transform: rotate(12deg) translateY(-6px); }
+  .exp-concerned .brow.r { transform: rotate(-12deg) translateY(-6px); }
+  .exp-concerned .mouth { width: 30%; height: 34px; border-radius: 999px 999px 0 0;
+    background: transparent; border: 9px solid #22d3ee; border-bottom: none; }
+
+  .exp-sleepy .eye { transform: scaleY(0.28) translateY(40%); }
+  .exp-sleepy .mouth { width: 16%; height: 14px; }
+
+  .exp-proud .eye { border-radius: 50% 50% 18% 18%; transform: scaleY(.68) translateY(16%); }
+  .exp-proud .mouth { width: 50%; height: 62px; border-radius: 0 0 999px 999px; }
+
+  .exp-apologetic .eye { transform: scaleY(.6) translateY(24%); }
+  .exp-apologetic .brow { opacity: 1; }
+  .exp-apologetic .brow.l { transform: rotate(18deg) translateY(-2px); }
+  .exp-apologetic .brow.r { transform: rotate(-18deg) translateY(-2px); }
+  .exp-apologetic .mouth { width: 22%; height: 20px; border-radius: 999px 999px 0 0; }
+
+  .exp-talking .eye { border-radius: 42%; }
+
+  .talking-now .mouth { animation: talk 0.32s infinite alternate ease-in-out; }
+  @keyframes talk {
+    from { height: 14px; width: 26%; }
+    to { height: 58px; width: 38%; border-radius: 40%; }
+  }
+
+  /* subtitle + status */
+  .subtitle {
+    min-height: 64px; max-width: 720px; text-align: center;
+    font-size: clamp(16px, 2.6vw, 24px); color: #bfeef7; line-height: 1.45;
+    text-shadow: 0 2px 18px rgba(34,211,238,.35); padding: 0 24px;
+  }
+  .hud {
+    position: fixed; top: 14px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 10px; align-items: center;
+    color: var(--muted); font-size: 13px;
+  }
+  .led { width: 10px; height: 10px; border-radius: 50%; background: var(--green);
+    box-shadow: 0 0 12px var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { opacity: .45; } }
+
+  .tap-overlay {
+    position: fixed; inset: 0; z-index: 50; background: rgba(5,7,15,.9);
+    display: flex; flex-direction: column; gap: 18px; align-items: center; justify-content: center;
+  }
+  .tap-overlay .big { font-size: 60px; }
+</style>
+</head>
+<body>
+<div class="stagefx"></div>
+
+<div class="hud">
+  <span class="led"></span>
+  <span id="hudState">CAT online - waiting for lesson</span>
+  <span class="badge badge-cyan" id="hudExp">neutral</span>
+  <span class="badge badge-gray" id="hudEng" title="class engagement drives my face">mood: -</span>
+  <button class="badge badge-gray" id="hudMic" style="border:none;cursor:pointer"
+          title="Classroom microphone: transcribe what the class says (speech-to-text)">&#127908; mic off</button>
+</div>
+
+<div class="face-wrap">
+  <div class="face" id="face">
+    <div class="brow l"></div><div class="brow r"></div>
+    <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+    <div class="mouth-area"><div class="mouth"></div></div>
+  </div>
+  <div class="subtitle" id="subtitle">Hello! I am CAT - your classroom robot.</div>
+</div>
+
+<div class="tap-overlay" id="tapOverlay">
+  <div class="big">&#128075;</div>
+  <h2>Tap to wake CAT up</h2>
+  <p class="muted">(enables the robot voice on this device)</p>
+  <button class="btn btn-primary" style="font-size:18px;padding:14px 34px;">Wake up CAT</button>
+</div>
+
+<script src="/static/common.js?v=22"></script>
+<script>
+  const face = document.getElementById("face");
+  const subtitle = document.getElementById("subtitle");
+  const hudState = document.getElementById("hudState");
+  const hudExp = document.getElementById("hudExp");
+  let voiceEnabled = false;
+  let voice = null;
+
+  function pickVoice() {
+    const vs = speechSynthesis.getVoices();
+    voice = vs.find(v => /Samantha|Karen|Google US English|Zira/i.test(v.name)) ||
+            vs.find(v => v.lang.startsWith("en")) || vs[0] || null;
+  }
+  if (window.speechSynthesis) {
+    speechSynthesis.onvoiceschanged = pickVoice;
+    pickVoice();
+  }
+
+  document.getElementById("tapOverlay").addEventListener("click", () => {
+    voiceEnabled = true;
+    document.getElementById("tapOverlay").style.display = "none";
+    speak("Hello! I am CAT, your classroom robot. I am ready when you are!");
+  });
+
+  function setExpression(name) {
+    face.className = "face exp-" + name;
+    hudExp.textContent = name;
+  }
+
+  /* Speech queue: sentences play one after another instead of cutting each other off.
+     When the SERVER speaker is on (robot voice from the computer's audio output),
+     this page only shows subtitles + mouth animation - no double voice. */
+  let serverSpeaker = false;
+  let speakQueue = [];
+  let speaking = false;
+  let mouthTimer = null;
+  function speak(text) {
+    if (serverSpeaker) {
+      subtitle.textContent = text;
+      face.classList.add("talking-now");
+      clearTimeout(mouthTimer);
+      mouthTimer = setTimeout(() => face.classList.remove("talking-now"),
+                              Math.min(20000, Math.max(1500, text.length * 60)));
+      return;
+    }
+    if (!voiceEnabled || !window.speechSynthesis) { subtitle.textContent = text; return; }
+    if (speakQueue.length >= 4) speakQueue.shift();   // never build a long backlog
+    speakQueue.push(text);
+    if (!speaking) playNext();
+  }
+  async function playNext() {
+    const text = speakQueue.shift();
+    if (text === undefined) { speaking = false; face.classList.remove("talking-now"); return; }
+    speaking = true;
+    // Prefer the server's natural neural voice (works in Docker / on any device)
+    try {
+      const res = await fetch("/api/tts?text=" + encodeURIComponent(text));
+      if (res.ok) {
+        const audio = new Audio(URL.createObjectURL(await res.blob()));
+        subtitle.textContent = text;
+        face.classList.add("talking-now");
+        audio.onended = () => { face.classList.remove("talking-now"); playNext(); };
+        audio.onerror = () => { face.classList.remove("talking-now"); playNext(); };
+        await audio.play();
+        return;
+      }
+    } catch (e) { /* fall through to browser voice */ }
+    const u = new SpeechSynthesisUtterance(text);
+    if (voice) u.voice = voice;
+    u.rate = 1.04; u.pitch = 1.25;
+    u.onstart = () => { subtitle.textContent = text; face.classList.add("talking-now"); };
+    u.onend = () => { face.classList.remove("talking-now"); playNext(); };
+    u.onerror = () => { face.classList.remove("talking-now"); playNext(); };
+    speechSynthesis.speak(u);
+  }
+
+  /* natural blinking */
+  setInterval(() => {
+    if (face.classList.contains("talking-now")) return;
+    face.classList.add("blink");
+    setTimeout(() => face.classList.remove("blink"), 140);
+  }, 3600 + Math.random() * 1400);
+
+  /* Classroom microphone: continuous speech-to-text -> /api/speech (robot mic array) */
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let micOn = false;
+  let rec = null;
+  function micUI() {
+    const b = document.getElementById("hudMic");
+    b.innerHTML = micOn ? "&#127908; mic LIVE" : "&#127908; mic off";
+    b.className = "badge " + (micOn ? "badge-green" : "badge-gray");
+    b.style.border = "none"; b.style.cursor = "pointer";
+  }
+  function startRec() {
+    rec = new SR();
+    rec.lang = "en-US";
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.onresult = (e) => {
+      const text = e.results[e.results.length - 1][0].transcript.trim();
+      if (text) fetch("/api/speech", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ transcript: text }),
+      }).catch(() => {});
+    };
+    rec.onend = () => { if (micOn) setTimeout(startRec, 400); };   // keep listening
+    rec.onerror = () => {};
+    rec.start();
+  }
+  if (!SR || !window.isSecureContext) document.getElementById("hudMic").style.display = "none";
+  else document.getElementById("hudMic").onclick = () => {
+    micOn = !micOn;
+    if (micOn) startRec(); else rec && rec.stop();
+    micUI();
+  };
+
+  connectWS("robot", (ev) => {
+    if (ev.type === "expression") setExpression(ev.expression);
+    else if (ev.type === "speaker_state") serverSpeaker = ev.enabled;
+    else if (ev.type === "speak") speak(ev.text);
+    else if (ev.type === "state") {
+      if (ev.lesson) hudState.textContent = `Lesson: ${ev.lesson.title} - ${ev.status}`;
+      if (ev.status === "ended") setExpression("proud");
+    } else if (ev.type === "question_open") setExpression(ev.question.is_minigame ? "excited" : "curious");
+    else if (ev.type === "engagement") {
+      const el = document.getElementById("hudEng");
+      el.textContent = `class ${ev.class_score}%`;
+      el.className = "badge " + (ev.class_score >= 70 ? "badge-green"
+                     : ev.class_score >= 45 ? "badge-yellow" : "badge-red");
+    }
+  });
+
+  setExpression("neutral");
+</script>
+</body>
+</html>

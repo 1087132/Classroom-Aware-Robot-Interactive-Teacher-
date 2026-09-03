@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CAT - Classroom-Aware Interactive Robot Teacher</title>
+<link rel="stylesheet" href="/static/style.css?v=22" />
+<style>
+  .wrap { max-width: 1050px; margin: 0 auto; padding: 40px 20px; }
+  .hero { text-align: center; margin-bottom: 34px; }
+  .hero .logo { font-size: 64px; }
+  .hero h1 { font-size: 34px; margin: 10px 0 6px; }
+  .hero p { color: var(--muted); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+  .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 26px 0; }
+  .tile { display: block; text-align: center; padding: 26px 16px; transition: transform .12s ease, border-color .2s; color: var(--text); }
+  .tile:hover { transform: translateY(-3px); border-color: var(--cyan); }
+  .tile .ico { font-size: 40px; }
+  .tile b { display: block; margin: 10px 0 4px; font-size: 17px; }
+  .tile span { color: var(--muted); font-size: 13px; }
+  .bottom { display: grid; grid-template-columns: 1fr 320px; gap: 14px; align-items: stretch; }
+  .steps { line-height: 2; color: var(--muted); font-size: 14px; }
+  .steps b { color: var(--text); }
+  .qrbox { text-align: center; }
+  .qrbox img { width: 190px; height: 190px; background: #fff; border-radius: 14px; padding: 10px; }
+  .qrbox .url { font-size: 13px; color: var(--cyan); margin-top: 8px; word-break: break-all; }
+  @media (max-width: 800px) { .bottom { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="logo">&#129302;</div>
+    <h1>Classroom-Aware Interactive Robot Teacher</h1>
+    <p>A smart teaching assistant that tracks engagement in real time, runs quizzes and
+       mini-games, answers on-topic questions with a constrained LLM, and keeps the
+       teacher in control - all on your local network.</p>
+  </div>
+
+  <div class="links">
+    <a class="card tile" href="/teacher">
+      <div class="ico">&#128202;</div><b>Teacher Dashboard</b>
+      <span>Start lessons, monitor engagement, control the robot</span>
+    </a>
+    <a class="card tile" href="/student" target="_blank">
+      <div class="ico">&#128241;</div><b>Student App</b>
+      <span>Join the class and answer questions</span>
+    </a>
+    <a class="card tile" href="/robot" target="_blank">
+      <div class="ico">&#128524;</div><b>Robot Face</b>
+      <span>Expressions + voice (put on the robot screen)</span>
+    </a>
+    <a class="card tile" href="/projector" target="_blank">
+      <div class="ico">&#128250;</div><b>Projector View</b>
+      <span>Questions and results on the big screen</span>
+    </a>
+    <a class="card tile" href="/tracking">
+      <div class="ico">&#128269;</div><b>Student Tracking</b>
+      <span>Live monitoring + progress across lessons</span>
+    </a>
+  </div>
+
+  <div class="card" id="installHint" style="display:none">
+    <h3>&#128241; Add to home screen</h3>
+    <p class="muted" style="margin:0">For quick access on this device, tap your browser's share button and choose <b>Add to Home Screen</b>.</p>
+  </div>
+
+  <div class="bottom">
+    <div class="card">
+      <h3>Quick demo (2 minutes)</h3>
+      <div class="steps">
+        1. Open the <b>Teacher Dashboard</b> and press <b>Start Lesson</b>.<br />
+        2. Open the <b>Robot Face</b> and <b>Projector</b> in separate windows.<br />
+        3. Students scan the QR code (or open the student URL) and <b>join</b>.<br />
+        4. Press <b>Next</b> to teach and launch questions - watch answers and live
+           engagement scores roll in.<br />
+        5. Press <b>End Lesson</b>, then review the session in <b>Student Tracking</b>.
+      </div>
+    </div>
+    <div class="card qrbox">
+      <h3>Students scan to join</h3>
+      <img src="/api/qr.svg?path=/student" alt="QR code" />
+      <div class="url" id="studentUrl">...</div>
+    </div>
+  </div>
+</div>
+<script src="/static/common.js?v=22"></script>
+<script>
+  api("/api/info").then((i) => {
+    document.getElementById("studentUrl").textContent = i.student_url;
+  });
+  if (window.matchMedia("(max-width: 768px)").matches) {
+    document.getElementById("installHint").style.display = "block";
+  }
+</script>
+</body>
+</html>

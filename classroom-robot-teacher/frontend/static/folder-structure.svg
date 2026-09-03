@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1096" viewBox="0 0 800 1096">
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; }
+    .root { fill: #0f172a; font-weight: bold; }
+    .dir { fill: #1d4ed8; font-weight: 600; }
+    .file { fill: #334155; }
+  </style>
+  <text x="20" y="42" class="root">classroom-robot-teacher/</text>
+  <text x="38" y="64" class="file">Dockerfile</text>
+  <text x="38" y="86" class="file">README.md</text>
+  <text x="38" y="108" class="file">README_GITHUB.md</text>
+  <text x="38" y="130" class="dir">backend/</text>
+  <text x="56" y="152" class="file">__init__.py</text>
+  <text x="56" y="174" class="file">analytics.py</text>
+  <text x="56" y="196" class="file">auth.py</text>
+  <text x="56" y="218" class="file">database.py</text>
+  <text x="56" y="240" class="file">lesson_engine.py</text>
+  <text x="56" y="262" class="dir">lessons/</text>
+  <text x="74" y="284" class="file">g3_quick_sample.json</text>
+  <text x="74" y="306" class="file">grade3_math.json</text>
+  <text x="74" y="328" class="file">math_puzzle.json</text>
+  <text x="74" y="350" class="file">science_quiz.json</text>
+  <text x="74" y="372" class="file">unit_test_lesson.json</text>
+  <text x="56" y="394" class="file">llm.py</text>
+  <text x="56" y="416" class="file">main.py</text>
+  <text x="56" y="438" class="file">perception.py</text>
+  <text x="56" y="460" class="file">textbook.py</text>
+  <text x="56" y="482" class="file">tts.py</text>
+  <text x="38" y="504" class="dir">data/</text>
+  <text x="56" y="526" class="file">cat.db</text>
+  <text x="56" y="548" class="dir">tts/</text>
+  <text x="74" y="570" class="file">kokoro-v1.0.onnx</text>
+  <text x="74" y="592" class="file">voices-v1.0.bin</text>
+  <text x="38" y="614" class="file">docker-compose.yml</text>
+  <text x="38" y="636" class="file">docker-entrypoint.sh</text>
+  <text x="38" y="658" class="dir">frontend/</text>
+  <text x="56" y="680" class="file">index.html</text>
+  <text x="56" y="702" class="file">login.html</text>
+  <text x="56" y="724" class="file">manifest.json</text>
+  <text x="56" y="746" class="file">projector.html</text>
+  <text x="56" y="768" class="file">robot.html</text>
+  <text x="56" y="790" class="dir">static/</text>
+  <text x="74" y="812" class="file">common.js</text>
+  <text x="74" y="834" class="dir">icons/</text>
+  <text x="92" y="856" class="file">apple-touch-icon.png</text>
+  <text x="92" y="878" class="file">icon-192x192.png</text>
+  <text x="92" y="900" class="file">icon-512x512.png</text>
+  <text x="74" y="922" class="file">offline.html</text>
+  <text x="74" y="944" class="file">style.css</text>
+  <text x="56" y="966" class="file">student.html</text>
+  <text x="56" y="988" class="file">sw.js</text>
+  <text x="56" y="1010" class="file">teacher.html</text>
+  <text x="56" y="1032" class="file">tracking.html</text>
+  <text x="38" y="1054" class="file">requirements.txt</text>
+  <text x="38" y="1076" class="file">run.sh</text>
+</svg>

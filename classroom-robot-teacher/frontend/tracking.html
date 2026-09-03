@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CAT - Student Tracking</title>
+<link rel="stylesheet" href="/static/style.css?v=22" />
+<style>
+  .wrap { max-width: 1500px; margin: 0 auto; padding: 16px; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  header .logo { font-size: 30px; }
+  header h1 { font-size: 20px; }
+  .tabs { display: flex; gap: 6px; margin-left: auto; }
+  .tab-btn { padding: 9px 18px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--card2); color: var(--muted); font-weight: 700; font-size: 14px; cursor: pointer; }
+  .tab-btn.active { background: linear-gradient(135deg, #0ea5e9, #22d3ee); color: #06202a; border: none; }
+
+  /* live tab */
+  .live-grid { display: grid; grid-template-columns: 1fr 360px; gap: 14px; align-items: start; }
+  @media (max-width: 1000px) { .live-grid { grid-template-columns: 1fr; } }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .scard { padding: 12px; }
+  .scard .head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .scard .head b { font-size: 15px; }
+  .scard canvas { width: 100%; height: 52px; margin: 8px 0; }
+  .mini-bars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .mb { text-align: center; }
+  .mb .lab { font-size: 10px; color: var(--muted); letter-spacing: .05em; }
+  .mb .bar { height: 5px; border-radius: 99px; background: rgba(148,163,184,.15); margin: 3px 0; overflow: hidden; }
+  .mb .bar > div { height: 100%; border-radius: 99px; background: var(--cyan); }
+  .mb .val { font-size: 11px; font-weight: 700; }
+  .scard .foot { display: flex; gap: 6px; margin-top: 8px; font-size: 11px; color: var(--muted); }
+
+  .alert-item { border-left: 3px solid var(--red); background: rgba(248,113,113,.08);
+    padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 12.5px; }
+  .alert-item .t { color: var(--muted); font-size: 11px; }
+  .empty { text-align: center; padding: 50px 20px; color: var(--muted); }
+  .empty .e { font-size: 46px; margin-bottom: 10px; }
+
+  /* history tabs */
+  .pane { display: none; }
+  .pane.active { display: block; animation: pageFade 0.22s ease; }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover td { background: rgba(34,211,238,.05); }
+  .detail-panel { margin-top: 14px; }
+  canvas.bigchart { width: 100%; height: 170px; }
+  .statchips { display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0 14px; }
+  .statchips .chip b { display: block; font-size: 24px; }
+  .statchips .chip span { color: var(--muted); font-size: 11.5px; }
+  .trend-up { color: var(--green); font-weight: 800; }
+  .trend-down { color: var(--red); font-weight: 800; }
+  .backlink { cursor: pointer; color: var(--cyan); font-size: 13px; margin-bottom: 8px; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo">&#128269;</span>
+    <div>
+      <h1>Student Tracking</h1>
+      <span class="muted" style="font-size:12px">Live monitoring + progress across lessons (teacher view)</span>
+    </div>
+    <span class="badge badge-cyan" id="statusBadge">-</span>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="live">&#128200; Live class</button>
+      <button class="tab-btn" data-tab="students">&#127891; Students</button>
+      <button class="tab-btn" data-tab="sessions">&#128197; Sessions</button>
+    </div>
+  </header>
+
+  <!-- ================= LIVE ================= -->
+  <div class="pane active" id="pane-live">
+    <div class="live-grid">
+      <div>
+        <div class="cards" id="liveCards">
+          <div class="card empty" style="grid-column:1/-1">
+            <div class="e">&#128564;</div>
+            <b>No live data yet</b>
+            <p>Start a lesson on the teacher dashboard and students will appear here with live
+               engagement sparklines, updated every 5 seconds.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col" style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <h3>Camera monitor <span class="badge badge-gray" id="camBadge">off</span></h3>
+          <div id="camView" style="display:none">
+            <img id="camImg" style="width:100%;border-radius:10px;border:1px solid var(--line)" alt="camera" />
+            <div class="row" style="justify-content:space-between;margin-top:8px;font-size:13px">
+              <span>&#128100; faces: <b id="camFaces">0</b></span>
+              <span id="camGaze" class="muted">&#128064; -</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:8px" id="camZones"></div>
+          </div>
+          <div id="camError" class="muted" style="display:none;font-size:12.5px;color:var(--red)"></div>
+          <button class="btn btn-primary btn-sm" id="camToggle" style="margin-top:10px;width:100%">
+            &#128247; Start camera monitoring</button>
+          <div class="muted" style="font-size:11px;margin-top:6px">
+            Local OpenCV gaze detection: <span style="color:var(--green)">focused</span> (2 eyes) /
+            <span style="color:var(--yellow)">partial-down</span> (eyes hidden) /
+            <span style="color:var(--red)">away</span> (head turned). Zone gaze drives that
+            column's attention. No frames are stored.</div>
+        </div>
+        <div class="card">
+          <h3>Class engagement</h3>
+          <div class="bignum" id="liveClassScore" style="font-size:38px">-</div>
+          <canvas class="chart" id="liveTimeline" style="width:100%;height:110px"></canvas>
+          <div class="muted" style="font-size:12px" id="liveAudio">&#127908; no audio activity</div>
+        </div>
+        <div class="card">
+          <h3>Low-engagement alerts</h3>
+          <div id="alertFeed" class="muted" style="font-size:13px;max-height:300px;overflow-y:auto">
+            No alerts yet - alerts fire when a student's score drops below 45.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= STUDENTS ================= -->
+  <div class="pane" id="pane-students">
+    <div class="card" style="margin-bottom:14px">
+      <h3>Register a student (pre-assign an ID)</h3>
+      <div class="row">
+        <button class="btn btn-green" id="regBtn">&#10133; Register new student &#8594; get ID</button>
+        <span class="muted" style="font-size:12px;flex:1">
+          No names are stored - each person is an anonymous <b>Student N</b> with a unique ID
+          (e.g. <b>S-007</b>) to rejoin with. New students can also self-register by simply
+          joining; their number + ID appear on their device.</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Student registry (all lessons)</h3>
+      <table>
+        <thead><tr><th>ID</th><th>Student</th><th>Sessions</th><th>Attendance</th><th>Avg engagement</th>
+          <th>Quiz accuracy</th><th>Points</th><th>Trend</th><th>Last seen</th></tr></thead>
+        <tbody id="regBody"><tr><td colspan="9" class="muted">Loading...</td></tr></tbody>
+      </table>
+    </div>
+    <div class="card detail-panel" id="studentDetail" style="display:none"></div>
+  </div>
+
+  <!-- ================= SESSIONS ================= -->
+  <div class="pane" id="pane-sessions">
+    <div class="card">
+      <h3>Past sessions</h3>
+      <table>
+        <thead><tr><th>Date</th><th>Lesson</th><th>Subject</th><th>Students</th>
+          <th>Class avg</th><th>Answers</th><th>Status</th></tr></thead>
+        <tbody id="sessBody"><tr><td colspan="7" class="muted">Loading...</td></tr></tbody>
+      </table>
+    </div>
+    <div class="card detail-panel" id="sessionDetail" style="display:none"></div>
+  </div>
+</div>
+
+<script src="/static/common.js?v=22"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const fmtDate = (ts) => ts ? new Date(ts * 1000).toLocaleString([], {day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit"}) : "-";
+  const scoreBadge = (v) => `<span class="badge badge-${v >= 70 ? "green" : v >= 45 ? "yellow" : "red"}">${v ?? "-"}</span>`;
+
+  // ---------------- tabs ----------------
+  document.querySelectorAll(".tab-btn").forEach(b => b.onclick = () => {
+    document.querySelectorAll(".tab-btn").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll(".pane").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    $("pane-" + b.dataset.tab).classList.add("active");
+    if (b.dataset.tab === "students") loadRegistry();
+    if (b.dataset.tab === "sessions") loadSessions();
+  });
+
+  // ---------------- LIVE tab ----------------
+  let liveTimeline = [];
+  function renderLive(students, classScore, timeline) {
+    if (timeline) liveTimeline = timeline;
+    $("liveClassScore").textContent = (classScore ?? "-") + (classScore != null ? "%" : "");
+    $("liveClassScore").style.color = classScore >= 70 ? "var(--green)" : classScore >= 45 ? "var(--yellow)" : "var(--red)";
+    drawTimeline($("liveTimeline"), liveTimeline);
+    if (!students || !students.length) return;
+    $("liveCards").innerHTML = students.map(s => `
+      <div class="card scard" id="sc-${s.student_id}">
+        <div class="head"><b>${esc(s.name)}</b>
+          <span class="muted" style="font-size:11px">seat ${s.row + 1}-${s.col + 1}</span>
+          <span class="spacer"></span>${scoreBadge(s.score)}</div>
+        <canvas id="spark-${s.student_id}"></canvas>
+        <div class="mini-bars">${[["A", s.attention], ["P", s.participation], ["Q", s.quiz], ["S", s.speaking]]
+          .map(([l, v]) => `<div class="mb"><div class="lab">${l}</div>
+            <div class="bar"><div style="width:${v}%"></div></div><div class="val">${v}</div></div>`).join("")}
+        </div>
+        <div class="foot"><span>&#9989; ${s.correct}/${s.answered} correct</span>
+          <span class="spacer"></span><span>&#11088; ${s.points} pts</span></div>
+      </div>`).join("");
+    students.forEach(s => drawSparkline($("spark-" + s.student_id), s.history || []));
+  }
+
+  function addAlert(a) {
+    const feed = $("alertFeed");
+    if (feed.firstElementChild?.tagName !== "DIV" || feed.textContent.startsWith("No alerts")) feed.innerHTML = "";
+    feed.insertAdjacentHTML("afterbegin", `<div class="alert-item">
+      &#9888;&#65039; <b>${esc(a.name)}</b> dropped to ${a.score}% engagement
+      <div class="t">${fmtTime(a.ts)}</div></div>`);
+    const card = $("sc-" + a.student_id);
+    if (card) { card.style.borderColor = "var(--red)"; setTimeout(() => card.style.borderColor = "", 4000); }
+  }
+
+  connectWS("tracking", (ev) => {
+    switch (ev.type) {
+      case "engagement": renderLive(ev.students, ev.class_score, ev.timeline);
+        (ev.alerts || []).forEach(addAlert); break;
+      case "tracking_alert": break; /* alerts arrive within engagement events too */
+      case "state":
+        $("statusBadge").textContent = ev.status;
+        if (ev.status === "ended") { loadRegistry(); loadSessions(); }
+        break;
+      case "audio_event":
+        $("liveAudio").innerHTML = `&#127908; voice from <b>${esc(ev.event.zone)}</b> (${ev.event.azimuth_deg}&deg;) - ${esc(ev.event.name)}`;
+        break;
+      case "perception_mode": updateCamera(); break;
+    }
+  });
+
+  // ---------------- camera monitor ----------------
+  let camOn = false;
+  $("camToggle").onclick = async () => {
+    $("camToggle").disabled = true;
+    try {
+      await api("/api/perception/mode", { mode: camOn ? "simulation" : "camera" });
+      setTimeout(updateCamera, 800);       // give the camera thread time to warm up
+    } catch (e) { toast(e.message, "error"); }
+    $("camToggle").disabled = false;
+  };
+
+  async function updateCamera() {
+    const live = await api("/api/tracking/live");
+    const p = live.perception || {};
+    camOn = p.mode === "camera" && p.camera_running;
+    $("camBadge").textContent = camOn ? "live" : "off";
+    $("camBadge").className = "badge " + (camOn ? "badge-green" : "badge-gray");
+    $("camToggle").innerHTML = camOn ? "&#9632; Stop camera monitoring" : "&#128247; Start camera monitoring";
+    $("camView").style.display = camOn ? "block" : "none";
+    const err = $("camError");
+    if (p.camera_error && p.mode !== "camera") {
+      err.style.display = "block";
+      err.textContent = "\u26A0\uFE0F " + p.camera_error;
+    } else err.style.display = "none";
+    if (camOn) {
+      if (!$("camImg").src.includes("/api/camera/stream"))
+        $("camImg").src = "/api/camera/stream?ts=" + Date.now();
+      $("camFaces").textContent = p.camera_faces ?? 0;
+      const gc = p.gaze_counts || {};
+      $("camGaze").innerHTML = `&#128064;
+        <span style="color:var(--green)">${gc.focused ?? 0} focused</span> &middot;
+        <span style="color:var(--yellow)">${(gc.partial ?? 0) + (gc.down ?? 0)} partial</span> &middot;
+        <span style="color:var(--red)">${gc.away ?? 0} away</span>`;
+      const zones = p.camera_zones || [0, 0, 0, 0, 0];
+      const zg = p.camera_zone_gaze || ["empty","empty","empty","empty","empty"];
+      const tint = { focused: "var(--green)", partial: "var(--yellow)", down: "var(--yellow)",
+                     away: "var(--red)", empty: "var(--muted)" };
+      const bg = { focused: "rgba(52,211,153,.18)", partial: "rgba(251,191,36,.15)",
+                   down: "rgba(251,191,36,.15)", away: "rgba(248,113,113,.15)",
+                   empty: "rgba(148,163,184,.08)" };
+      $("camZones").innerHTML = zones.map((n, i) => `
+        <div style="text-align:center;padding:5px 2px;border-radius:7px;font-size:10.5px;
+          background:${bg[zg[i]]};color:${tint[zg[i]]};border:1px solid ${tint[zg[i]]}30">
+          col ${i + 1}<br/><b>${n > 0 ? zg[i] : "empty"}</b></div>`).join("");
+    } else {
+      $("camImg").removeAttribute("src");
+    }
+  }
+  setInterval(() => { if (document.getElementById("pane-live").classList.contains("active")) updateCamera(); }, 3000);
+
+  // ---------------- STUDENTS tab ----------------
+  async function loadRegistry() {
+    const rows = await api("/api/history/students");
+    $("regBody").innerHTML = rows.length ? rows.map(r => `
+      <tr class="clickable" onclick="openStudent(${r.roster_id})">
+        <td><span class="badge badge-cyan">${esc(r.code || "-")}</span></td>
+        <td><b>${esc(r.name)}</b></td>
+        <td>${r.sessions_attended}/${r.total_sessions}</td>
+        <td>${r.attendance_pct}%</td>
+        <td>${scoreBadge(r.avg_engagement)}</td>
+        <td>${r.quiz_accuracy != null ? r.quiz_accuracy + "%" : "-"}</td>
+        <td>${r.total_points}</td>
+        <td>${r.trend == null ? '<span class="muted">-</span>'
+              : r.trend >= 0 ? `<span class="trend-up">&#9650; ${r.trend}</span>`
+              : `<span class="trend-down">&#9660; ${Math.abs(r.trend)}</span>`}</td>
+        <td class="muted">${fmtDate(r.last_seen)}</td>
+      </tr>`).join("")
+      : `<tr><td colspan="9" class="muted">No students yet - register one above or run a lesson.</td></tr>`;
+  }
+
+  $("regBtn").onclick = async () => {
+    try {
+      const e = await api("/api/roster", {});
+      toast(`${e.name} registered - ID: ${e.code}`, "success");
+      loadRegistry();
+    } catch (err) { toast(err.message, "error"); }
+  };
+
+  window.openStudent = async (rid) => {
+    const d = await api("/api/history/students/" + rid);
+    const panel = $("studentDetail");
+    panel.style.display = "block";
+    const avg = (k) => {
+      const vals = d.sessions.map(s => s[k]).filter(v => v != null);
+      return vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length * 10) / 10 : "-";
+    };
+    panel.innerHTML = `
+      <span class="backlink" onclick="$('studentDetail').style.display='none'">&#8592; close profile</span>
+      <h2 style="margin-bottom:2px">&#127891; ${esc(d.name)}
+        <span class="badge badge-cyan">${esc(d.code || "")}</span></h2>
+      <div class="statchips">
+        <div class="chip"><b>${d.sessions.length}</b><span>sessions attended</span></div>
+        <div class="chip"><b>${avg("score")}</b><span>avg engagement</span></div>
+        <div class="chip"><b>${avg("quiz")}%</b><span>avg quiz</span></div>
+        <div class="chip"><b>${d.sessions.reduce((a, s) => a + (s.points || 0), 0)}</b><span>total points</span></div>
+        <div class="chip"><b>${d.questions_to_robot}</b><span>questions to CAT</span></div>
+      </div>
+      <h3>Engagement across sessions</h3>
+      <canvas class="bigchart" id="profileChart"></canvas>
+      <h3 style="margin-top:14px">Per-session breakdown</h3>
+      <table><thead><tr><th>Date</th><th>Lesson</th><th>Attention</th><th>Participation</th>
+        <th>Quiz</th><th>Speaking</th><th>Score</th><th>Answers</th><th>Points</th></tr></thead>
+        <tbody>${d.sessions.map(s => `<tr>
+          <td class="muted">${fmtDate(s.started_at)}</td><td>${esc(s.lesson_title)}</td>
+          <td>${s.attention ?? "-"}</td><td>${s.participation ?? "-"}</td><td>${s.quiz ?? "-"}</td>
+          <td>${s.speaking ?? "-"}</td><td>${scoreBadge(s.score)}</td>
+          <td>${s.correct}/${s.answered}</td><td>${s.points}</td></tr>`).join("")}
+        </tbody></table>`;
+    const pts = d.sessions.filter(s => s.score != null).map(s => ({ ts: s.started_at, score: s.score }));
+    drawTimeline($("profileChart"), pts.length >= 2 ? pts : [], "score");
+    panel.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // ---------------- SESSIONS tab ----------------
+  async function loadSessions() {
+    const rows = await api("/api/history/sessions");
+    $("sessBody").innerHTML = rows.length ? rows.map(s => `
+      <tr class="clickable" onclick="openSession(${s.id})">
+        <td class="muted">${fmtDate(s.started_at)}</td>
+        <td><b>${esc(s.lesson_title)}</b></td><td>${esc(s.subject)}</td>
+        <td>${s.num_students}</td><td>${scoreBadge(s.class_avg)}</td>
+        <td>${s.num_responses}</td>
+        <td><span class="badge badge-${s.status === "ended" ? "gray" : "cyan"}">${esc(s.status)}</span></td>
+      </tr>`).join("")
+      : `<tr><td colspan="7" class="muted">No sessions yet.</td></tr>`;
+  }
+
+  window.openSession = async (id) => {
+    const d = await api("/api/history/sessions/" + id);
+    const panel = $("sessionDetail");
+    panel.style.display = "block";
+    panel.innerHTML = `
+      <span class="backlink" onclick="$('sessionDetail').style.display='none'">&#8592; close session</span>
+      <h2 style="margin-bottom:2px">${esc(d.session.lesson_title)}
+        <span class="muted" style="font-size:13px">${fmtDate(d.session.started_at)}</span></h2>
+      <h3 style="margin-top:12px">Class engagement timeline</h3>
+      <canvas class="bigchart" id="sessChart"></canvas>
+      <h3 style="margin-top:14px">Students (${d.students.length})</h3>
+      <table><thead><tr><th>Student</th><th>Attention</th><th>Participation</th><th>Quiz</th>
+        <th>Speaking</th><th>Score</th><th>Answers</th><th>Points</th></tr></thead>
+        <tbody>${d.students.map(s => `<tr>
+          <td><b>${esc(s.name)}</b></td><td>${s.attention ?? "-"}</td><td>${s.participation ?? "-"}</td>
+          <td>${s.quiz ?? "-"}</td><td>${s.speaking ?? "-"}</td><td>${scoreBadge(s.score)}</td>
+          <td>${s.correct}/${s.answered}</td><td>${s.points}</td></tr>`).join("")}
+        </tbody></table>`;
+    drawTimeline($("sessChart"), d.timeline.length >= 2 ? d.timeline : []);
+    panel.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // ---------------- boot ----------------
+  (async () => {
+    const live = await api("/api/tracking/live");
+    $("statusBadge").textContent = live.status + (live.lesson ? " - " + live.lesson.title : "");
+    if (live.students.length) renderLive(live.students, live.class_score, live.timeline);
+    updateCamera();
+  })();
+</script>
+</body>
+</html>

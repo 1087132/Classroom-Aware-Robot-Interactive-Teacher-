@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+qrcode
+pypdf
+
+# Natural neural robot voice (offline after one-time model download)
+kokoro-onnx
+soundfile
+
+# Real webcam face detection for the perception module (camera monitoring).
+# Pinned to 4.x: OpenCV 5 removed cv2.CascadeClassifier + bundled haarcascades.
+opencv-python>=4.8,<5

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>CAT - Student</title>
+<link rel="stylesheet" href="/static/style.css?v=22" />
+<style>
+  .app { max-width: 480px; margin: 0 auto; padding: 16px; min-height: 100vh; display: flex; flex-direction: column; gap: 14px; }
+  .top { display: flex; align-items: center; gap: 10px; }
+  .top .logo { font-size: 30px; }
+  .pts { margin-left: auto; text-align: right; }
+  .pts b { color: var(--yellow); font-size: 20px; }
+
+  .join-seats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 12px 0; }
+  .jseat { aspect-ratio: 1.1; border-radius: 8px; border: 1px solid var(--line); background: var(--card2);
+    display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--muted); cursor: pointer; }
+  .jseat.taken { opacity: .35; cursor: not-allowed; }
+  .jseat.sel { border-color: var(--cyan); background: rgba(34,211,238,.18); color: var(--cyan); font-weight: 700; }
+
+  .q-card .qtext { font-size: 20px; font-weight: 800; line-height: 1.4; margin-bottom: 14px; }
+  .optbtn {
+    display: flex; align-items: center; gap: 12px; width: 100%; margin-bottom: 10px;
+    padding: 15px 14px; border-radius: 14px; border: 1px solid var(--line);
+    background: var(--card2); color: var(--text); font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: transform .06s;
+  }
+  .optbtn:active { transform: scale(.98); }
+  .optbtn .key { width: 34px; height: 34px; flex: none; border-radius: 9px; display: flex;
+    align-items: center; justify-content: center; color: #06202a; font-weight: 800; }
+  .optbtn.picked { border-color: var(--cyan); background: rgba(34,211,238,.15); }
+  .optbtn.correct { border-color: var(--green); background: rgba(52,211,153,.18); }
+  .optbtn.wrong { border-color: var(--red); background: rgba(248,113,113,.15); }
+  .optbtn:disabled { cursor: not-allowed; }
+  .k0 { background: #22d3ee; } .k1 { background: #a78bfa; } .k2 { background: #fbbf24; } .k3 { background: #34d399; }
+
+  .feedback { text-align: center; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 17px; margin-top: 6px; }
+  .feedback.good { background: rgba(52,211,153,.15); color: var(--green); }
+  .feedback.bad { background: rgba(248,113,113,.12); color: var(--red); }
+
+  .target-banner { background: linear-gradient(135deg,#7c3aed,#a78bfa); color: #fff; border-radius: 12px;
+    padding: 10px 14px; font-weight: 800; text-align: center; margin-bottom: 12px; animation: pop .4s ease; }
+  @keyframes pop { from { transform: scale(.8); opacity: 0; } }
+
+  .waiting { text-align: center; padding: 30px 10px; }
+  .waiting .emoji { font-size: 54px; }
+
+  .ask-box { margin-top: auto; }
+  .bubble { border-radius: 14px; padding: 12px 14px; font-size: 14px; margin-top: 10px; line-height: 1.5; }
+  .bubble.robot { background: rgba(34,211,238,.1); border: 1px solid rgba(34,211,238,.3); }
+  .bubble.offtopic { background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.3); }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <span class="logo">&#129302;</span>
+    <div><b id="hdrName">CAT Class</b><div class="muted" style="font-size:12px" id="hdrLesson">Student app</div></div>
+    <div class="pts" id="ptsBox" style="display:none"><div class="muted" style="font-size:11px">MY POINTS</div><b id="myPts">0</b></div>
+  </div>
+
+  <!-- JOIN -->
+  <div class="card" id="joinCard">
+    <h3>Join the class</h3>
+    <div id="joinMsg" class="muted" style="margin-bottom:10px">
+      Returning? Enter your student ID. First time? Just pick a seat and join -
+      you'll be assigned a student number.</div>
+    <input type="text" id="idInput" placeholder="Student ID if you have one (e.g. S-007)" maxlength="10"
+           style="text-transform:uppercase" />
+    <div class="join-seats" id="seatGrid"></div>
+    <div class="muted" style="font-size:11px;margin-bottom:10px">&#11014; front of class (near robot)</div>
+    <button class="btn btn-primary" style="width:100%;font-size:16px" id="joinBtn">Join class &#128640;</button>
+  </div>
+
+  <!-- MAIN -->
+  <div id="mainArea" style="display:none">
+    <div class="card q-card" id="contentCard">
+      <div class="waiting"><div class="emoji">&#128064;</div>
+        <h2 id="waitTitle">Get ready!</h2>
+        <p class="muted" id="waitBody">Watch the board and listen to CAT.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASK CAT -->
+  <div class="card ask-box" id="askCard" style="display:none">
+    <h3>Ask CAT (about the lesson!)</h3>
+    <div class="row">
+      <button class="btn btn-sm" id="micBtn" title="Tap and speak - your words are typed for you">&#127908;</button>
+      <input type="text" id="askInput" placeholder="e.g. What is a fraction?" style="flex:1" maxlength="200" />
+      <button class="btn btn-purple" id="askBtn">Ask</button>
+      <button class="btn btn-sm" id="ttsBtn" title="Read CAT's answers aloud">&#128263;</button>
+    </div>
+    <div id="micStatus" class="muted" style="font-size:11.5px;margin-top:6px;display:none"></div>
+    <div id="askAnswer"></div>
+  </div>
+</div>
+
+<script src="/static/common.js?v=22"></script>
+<script>
+  let me = JSON.parse(localStorage.getItem("cat_student") || "null");
+  let seatSel = null;
+  let curQ = null;
+  let answered = {};       // question_id -> {answer_index, correct}
+  let myPoints = 0;
+
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- join flow ----------
+  async function loadSeats() {
+    try {
+      const s = await api("/api/seats");
+      const grid = $("seatGrid");
+      grid.innerHTML = "";
+      const takenSet = new Set(s.taken.map(t => `${t.row},${t.col}`));
+      for (let r = 0; r < s.rows; r++) for (let c = 0; c < s.cols; c++) {
+        const d = document.createElement("div");
+        const taken = takenSet.has(`${r},${c}`);
+        d.className = "jseat" + (taken ? " taken" : "");
+        d.textContent = taken ? s.taken.find(t => t.row === r && t.col === c).name.replace("Student ", "#") : `${r + 1}-${c + 1}`;
+        if (!taken) d.onclick = () => {
+          document.querySelectorAll(".jseat.sel").forEach(x => x.classList.remove("sel"));
+          d.classList.add("sel");
+          seatSel = { row: r, col: c };
+        };
+        grid.appendChild(d);
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  $("joinBtn").onclick = async () => {
+    const code = $("idInput").value.trim().toUpperCase();
+    try {
+      const body = { ...(code ? { student_code: code } : {}), ...(seatSel || {}) };
+      me = await api("/api/join", body);
+      localStorage.setItem("cat_student", JSON.stringify(me));
+      if (me.code) localStorage.setItem("cat_student_code", me.code);
+      if (!code && me.code) toast(`You are ${me.name} - ID ${me.code}. Remember it!`, "success");
+      if (me.rejoined) toast("Welcome back! Continuing your session.", "success");
+      enterClass();
+    } catch (e) { toast(e.message, "error"); $("joinMsg").textContent = e.message; }
+  };
+
+  function enterClass() {
+    $("joinCard").style.display = "none";
+    $("mainArea").style.display = "block";
+    $("askCard").style.display = "block";
+    $("ptsBox").style.display = "block";
+    $("hdrName").innerHTML = `${esc(me.name)} ${me.code ? `<span class="badge badge-cyan" style="font-size:10px">${esc(me.code)}</span>` : ""}`;
+    $("hdrLesson").textContent = me.lesson || "In class";
+    syncState();
+  }
+
+  async function syncState() {
+    const st = await api("/api/state");
+    if (st.lesson) $("hdrLesson").textContent = st.lesson.title;
+    if (st.status === "question" && st.question) showQuestion(st.question, st.question_remaining_s);
+    else if (st.status === "ended") showEnded();
+    else showWaiting(st.status);
+  }
+
+  // ---------- screens ----------
+  function showWaiting(status, title, body) {
+    curQ = null;
+    const msgs = {
+      greeting: ["&#128075;", "CAT is saying hello!", "Listen to the robot."],
+      content: ["&#128218;", title || "Lesson time!", body || "Watch the board and listen to CAT."],
+      review: ["&#129300;", "Checking answers...", "See the correct answer on the board!"],
+      paused: ["&#9208;&#65039;", "Paused", "Eyes on your teacher!"],
+    };
+    const m = msgs[status] || ["&#128064;", "Get ready!", "The lesson will continue soon."];
+    $("contentCard").innerHTML = `<div class="waiting"><div class="emoji">${m[0]}</div>
+      <h2>${esc(title || m[1])}</h2><p class="muted">${esc(body || m[2])}</p></div>`;
+  }
+
+  function showQuestion(q, remaining) {
+    curQ = q;
+    const mine = answered[q.id];
+    const forMe = q.target && me && q.target.id === me.student_id;
+    $("contentCard").innerHTML = `
+      ${forMe ? `<div class="target-banner">&#127919; CAT picked YOU for this one, ${esc(me.name)}!</div>` : ""}
+      ${q.is_minigame ? `<div class="badge badge-yellow" style="margin-bottom:10px">&#9889; MINI-GAME - double points!</div>` : ""}
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <span class="badge badge-cyan">${esc(q.difficulty || "question")}</span>
+        <span class="muted" id="qTimer">${remaining ?? q.time_limit}s</span>
+      </div>
+      <div class="timerbar" id="qBar" style="margin-bottom:14px"><div style="width:100%"></div></div>
+      <div class="qtext">${esc(q.text)}</div>
+      <div id="optWrap">${q.options.map((o, i) => `
+        <button class="optbtn ${mine && mine.answer_index === i ? "picked" : ""}" data-i="${i}" ${mine ? "disabled" : ""}>
+          <span class="key k${i}">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`).join("")}
+      </div>
+      <div id="fbWrap">${mine ? feedbackHtml(mine.correct, mine.points) : ""}</div>
+      <div id="aiFbHost">${aiFbHtml(q.id)}</div>`;
+    if (!mine) document.querySelectorAll(".optbtn").forEach(b => b.onclick = () => submit(q, +b.dataset.i));
+  }
+
+  const aiFb = {};                       // question_id -> LLM feedback text
+  function aiFbHtml(qid) {
+    return aiFb[qid] ? `<div class="bubble robot">&#129302; <b>CAT:</b> ${esc(aiFb[qid])}</div>` : "";
+  }
+
+  function feedbackHtml(correct, points) {
+    return correct
+      ? `<div class="feedback good">&#127881; Correct! +${points} points</div>`
+      : `<div class="feedback bad">Not quite - watch the board for the answer!</div>`;
+  }
+
+  async function submit(q, idx) {
+    try {
+      const res = await api("/api/answer", { student_id: me.student_id, question_id: q.id, answer_index: idx });
+      answered[q.id] = { answer_index: idx, correct: res.correct, points: res.points };
+      myPoints += res.points || 0;
+      $("myPts").textContent = myPoints;
+      document.querySelectorAll(".optbtn").forEach(b => {
+        b.disabled = true;
+        if (+b.dataset.i === idx) b.classList.add(res.correct ? "correct" : "picked");
+      });
+      $("fbWrap").innerHTML = feedbackHtml(res.correct, res.points);
+    } catch (e) { toast(e.message, "error"); }
+  }
+
+  let lastResultsQid = null;
+  function showResults(r) {
+    const mine = answered[r.question_id];
+    lastResultsQid = r.question_id;
+    $("contentCard").innerHTML = `
+      <h2 style="font-size:18px">&#9989; Answer revealed!</h2>
+      <div class="qtext" style="font-size:16px">${esc(r.text)}</div>
+      ${r.options.map((o, i) => `
+        <button class="optbtn ${i === r.correct_index ? "correct" : (mine && mine.answer_index === i ? "wrong" : "")}" disabled>
+          <span class="key k${i}">${"ABCD"[i]}</span><span>${esc(o)}</span>
+          ${i === r.correct_index ? "<span style='margin-left:auto'>&#10004;</span>" : ""}</button>`).join("")}
+      <div class="bubble robot">&#128161; ${esc(r.explanation)}</div>
+      ${mine ? feedbackHtml(mine.correct, mine.points || 0) : `<div class="feedback bad">Time's up - you didn't answer this one.</div>`}
+      <div id="aiFbHost">${aiFbHtml(r.question_id)}</div>`;
+  }
+
+  function showEnded() {
+    curQ = null;
+    $("contentCard").innerHTML = `<div class="waiting"><div class="emoji">&#127881;</div>
+      <h2>Lesson complete!</h2>
+      <p class="muted">You earned <b style="color:var(--yellow)">${myPoints} points</b>. Great job, ${esc(me?.name || "friend")}!</p>
+      ${me?.code ? `<p class="muted" style="font-size:12px">Your student ID: <b style="color:var(--cyan)">${esc(me.code)}</b> - use it to join next lesson!</p>` : ""}
+      <button class="btn btn-primary" style="margin-top:12px"
+        onclick="localStorage.removeItem('cat_student');location.reload()">&#128260; Join the next lesson</button></div>`;
+  }
+
+  // ---------- ask CAT ----------
+  $("askBtn").onclick = async () => {
+    const q = $("askInput").value.trim();
+    if (!q) return;
+    $("askBtn").disabled = true;
+    try {
+      const res = await api("/api/ask", { student_id: me?.student_id, question: q });
+      $("askAnswer").innerHTML = `<div class="bubble ${res.on_topic ? "robot" : "offtopic"}">
+        <b>&#129302; CAT:</b> ${esc(res.answer)}
+        ${res.on_topic ? "" : `<div class="muted" style="font-size:11px;margin-top:6px">Off-topic questions are politely refused (constrained LLM)</div>`}</div>`;
+      speakAnswer(res.answer);
+      $("askInput").value = "";
+    } catch (e) { toast(e.message, "error"); }
+    $("askBtn").disabled = false;
+  };
+  $("askInput").addEventListener("keydown", (e) => { if (e.key === "Enter") $("askBtn").click(); });
+
+  // ---------- speech-to-text (record what the student says) ----------
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR || !window.isSecureContext) {
+    $("micBtn").style.display = "none";     // STT needs HTTPS or localhost
+  } else {
+    let listening = false;
+    let rec = null;
+    $("micBtn").onclick = () => {
+      if (listening) { rec && rec.stop(); return; }
+      rec = new SR();
+      rec.lang = "en-US";
+      rec.interimResults = true;
+      listening = true;
+      $("micBtn").style.background = "var(--red)";
+      $("micStatus").style.display = "block";
+      $("micStatus").textContent = "Listening... speak now";
+      let finalText = "";
+      rec.onresult = (e) => {
+        let interim = "";
+        for (const res of e.results) (res.isFinal ? (finalText += res[0].transcript) : (interim += res[0].transcript));
+        $("micStatus").textContent = "\u{1F3A4} " + (finalText || interim);
+      };
+      rec.onend = async () => {
+        listening = false;
+        $("micBtn").style.background = "";
+        const text = finalText.trim();
+        if (!text) { $("micStatus").textContent = "Didn't catch that - try again!"; return; }
+        $("askInput").value = text;
+        try {   // record + classify the utterance (counts toward speaking score)
+          const cls = await api("/api/speech", { student_id: me?.student_id, transcript: text });
+          $("micStatus").innerHTML = `Heard: "${esc(text)}" &middot; ` + (
+            cls.kind === "answer" ? `<span style="color:var(--green)">sounds like an answer - tap it above!</span>`
+            : cls.interaction ? `<span style="color:var(--cyan)">lesson talk recorded &#10004;</span> - tap Ask to ask CAT`
+            : `<span style="color:var(--yellow)">recorded (off-topic)</span>`);
+        } catch (err) { $("micStatus").textContent = err.message; }
+      };
+      rec.onerror = () => { listening = false; $("micBtn").style.background = ""; };
+      rec.start();
+    };
+  }
+
+  // ---------- text-to-speech (CAT's answers read aloud) ----------
+  let ttsOn = localStorage.getItem("cat_tts") === "1";
+  const renderTts = () => { $("ttsBtn").innerHTML = ttsOn ? "&#128266;" : "&#128263;"; };
+  renderTts();
+  $("ttsBtn").onclick = () => { ttsOn = !ttsOn; localStorage.setItem("cat_tts", ttsOn ? "1" : "0"); renderTts(); toast(ttsOn ? "CAT will read answers aloud" : "Voice off", "info"); };
+  function speakAnswer(text) {
+    if (!ttsOn || !window.speechSynthesis) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 1.05; u.pitch = 1.2;
+    speechSynthesis.speak(u);
+  }
+
+  // ---------- live events ----------
+  connectWS("student", (ev) => {
+    switch (ev.type) {
+      case "question_open": showQuestion(ev.question); break;
+      case "question_closed": if (me) showResults(ev.results); break;
+      case "question_tick": {
+        const bar = $("qBar"), t = $("qTimer");
+        if (bar && curQ) {
+          t.textContent = ev.remaining_s + "s";
+          bar.firstElementChild.style.width = (ev.remaining_s / curQ.time_limit) * 100 + "%";
+          bar.classList.toggle("low", ev.remaining_s <= 5);
+        }
+        break;
+      }
+      case "stage":
+        if (!me) break;
+        if (ev.stage === "ended") showEnded();
+        else showWaiting(ev.stage, ev.title, ev.body);
+        break;
+      case "state":
+        if (me && ev.status === "greeting" && ev.session_id) { /* new session started */ }
+        break;
+      case "engagement": {
+        const mineRow = (ev.students || []).find(s => s.student_id === me?.student_id);
+        if (mineRow) { myPoints = mineRow.points; $("myPts").textContent = myPoints; }
+        break;
+      }
+      case "answer_feedback": {
+        if (!me || ev.student_id !== me.student_id) break;
+        aiFb[ev.question_id] = ev.text;
+        const host = $("aiFbHost");
+        if (host && (curQ?.id === ev.question_id || lastResultsQid === ev.question_id))
+          host.innerHTML = aiFbHtml(ev.question_id);
+        break;
+      }
+    }
+  });
+
+  // ---------- boot ----------
+  (async () => {
+    // Re-join screen if stored student belongs to an old session
+    if (me) {
+      try {
+        const st = await api("/api/state");
+        const stillIn = (st.students || []).some(s => s.id === me.student_id);
+        if (stillIn && st.status !== "ended") return enterClass();
+      } catch (e) { /* fallthrough */ }
+      me = null; localStorage.removeItem("cat_student");
+    }
+    const savedCode = localStorage.getItem("cat_student_code");
+    if (savedCode) $("idInput").value = savedCode;   // remember my ID for the next lesson
+    loadSeats();
+    setInterval(() => { if (!me) loadSeats(); }, 4000);
+  })();
+</script>
+</body>
+</html>

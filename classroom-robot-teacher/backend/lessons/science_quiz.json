@@ -1,0 +1,188 @@
+{
+  "id": "science_quiz",
+  "title": "Solar System Science Quiz",
+  "subject": "Science",
+  "grade": "Grade 5-6",
+  "topic_label": "the Solar System and planets",
+  "duration_min": 20,
+  "greeting": "Hello space explorers! I am CAT, your robot teaching assistant. Today we blast off on a journey through the Solar System! Buckle up, keep your eyes on the board, and get ready for the Science Quiz!",
+  "closing": "Mission complete, astronauts! You explored the Sun, the planets, and beyond. Your brains are officially out of this world. See you on the next mission!",
+  "flow": [
+    {
+      "type": "content",
+      "title": "Our Solar System",
+      "body": "The Solar System is our cosmic neighborhood: the SUN in the center with 8 planets orbiting it - Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune. The Sun is a STAR, a giant ball of hot glowing gas that gives us light and heat.",
+      "speak": "The Solar System is our cosmic neighborhood. The Sun sits in the center, with eight planets orbiting around it. The Sun is a star, a giant ball of hot glowing gas!",
+      "expression": "talking"
+    },
+    { "type": "question", "question_id": "s1" },
+    { "type": "question", "question_id": "s2" },
+    {
+      "type": "content",
+      "title": "Rocky planets vs gas giants",
+      "body": "The 4 planets closest to the Sun (Mercury, Venus, Earth, Mars) are small and ROCKY. The 4 far planets (Jupiter, Saturn, Uranus, Neptune) are huge GAS GIANTS. Jupiter is the biggest planet of all - more than 1300 Earths could fit inside it!",
+      "speak": "The four planets closest to the Sun are small and rocky. The four far planets are huge gas giants. Jupiter is the biggest, more than one thousand three hundred Earths could fit inside!",
+      "expression": "talking"
+    },
+    { "type": "question", "question_id": "s3" },
+    { "type": "question", "question_id": "s4" },
+    {
+      "type": "content",
+      "title": "Days, years and the Moon",
+      "body": "Earth SPINS like a top - one full spin is a DAY (24 hours). Earth also travels around the Sun - one full trip is a YEAR (about 365 days). The Moon orbits Earth about once a month and reflects sunlight - that's why it glows at night!",
+      "speak": "Earth spins like a top. One spin is a day. Earth also travels around the Sun. One full trip is a year. And the Moon glows because it reflects sunlight!",
+      "expression": "curious"
+    },
+    { "type": "question", "question_id": "s5" }
+  ],
+  "questions": [
+    {
+      "id": "s1",
+      "text": "What is at the CENTER of our Solar System?",
+      "options": ["Earth", "The Moon", "The Sun", "Jupiter"],
+      "answer": 2,
+      "time_limit": 25,
+      "difficulty": "easy",
+      "explanation": "The Sun is at the center, and all eight planets orbit around it.",
+      "keywords": ["sun", "center", "solar system"]
+    },
+    {
+      "id": "s2",
+      "text": "How many planets are in our Solar System?",
+      "options": ["7", "8", "9", "10"],
+      "answer": 1,
+      "time_limit": 25,
+      "difficulty": "easy",
+      "explanation": "There are 8 planets. Pluto was reclassified as a dwarf planet in 2006.",
+      "keywords": ["planets", "eight", "how many"]
+    },
+    {
+      "id": "s3",
+      "text": "Which is the BIGGEST planet in the Solar System?",
+      "options": ["Earth", "Saturn", "Neptune", "Jupiter"],
+      "answer": 3,
+      "time_limit": 30,
+      "difficulty": "easy",
+      "explanation": "Jupiter is the biggest - over 1300 Earths could fit inside it!",
+      "keywords": ["jupiter", "biggest", "largest"]
+    },
+    {
+      "id": "s4",
+      "text": "Which planet is famous for its beautiful RINGS?",
+      "options": ["Mars", "Saturn", "Venus", "Mercury"],
+      "answer": 1,
+      "time_limit": 30,
+      "difficulty": "medium",
+      "explanation": "Saturn's rings are made of billions of pieces of ice and rock.",
+      "keywords": ["saturn", "rings"]
+    },
+    {
+      "id": "s5",
+      "text": "Why does the Moon shine at night?",
+      "options": ["It burns like a star", "It reflects sunlight", "It has glowing rocks", "City lights reach it"],
+      "answer": 1,
+      "time_limit": 35,
+      "difficulty": "medium",
+      "explanation": "The Moon does not make its own light - it reflects light from the Sun.",
+      "keywords": ["moon", "shine", "reflect"]
+    },
+    {
+      "id": "sg1",
+      "text": "Quick! Which planet do we live on?",
+      "options": ["Mars", "Venus", "Earth", "Neptune"],
+      "answer": 2,
+      "time_limit": 10,
+      "difficulty": "easy",
+      "explanation": "We live on Earth, the third planet from the Sun.",
+      "keywords": ["earth", "live"]
+    },
+    {
+      "id": "sg2",
+      "text": "Quick! Is the Sun a star or a planet?",
+      "options": ["Star", "Planet", "Moon", "Comet"],
+      "answer": 0,
+      "time_limit": 10,
+      "difficulty": "easy",
+      "explanation": "The Sun is a star - a giant ball of hot glowing gas.",
+      "keywords": ["sun", "star"]
+    },
+    {
+      "id": "sg3",
+      "text": "Quick! Which planet is called the RED planet?",
+      "options": ["Jupiter", "Mars", "Saturn", "Mercury"],
+      "answer": 1,
+      "time_limit": 10,
+      "difficulty": "easy",
+      "explanation": "Mars looks red because of rusty iron dust on its surface.",
+      "keywords": ["mars", "red"]
+    }
+  ],
+  "minigame": {
+    "title": "Rocket Speed Round",
+    "intro": "Bonus mission! The Rocket Speed Round! Ten seconds per question, double points. Three, two, one... LIFT OFF!",
+    "question_ids": ["sg1", "sg2", "sg3"],
+    "time_limit": 10
+  },
+  "knowledge_base": [
+    {
+      "q": "What is the Solar System?",
+      "a": "The Solar System is the Sun and everything that orbits it: 8 planets, moons, asteroids and comets.",
+      "keywords": ["solar system", "planets", "sun"]
+    },
+    {
+      "q": "What is the Sun?",
+      "a": "The Sun is a star - a giant ball of hot glowing gas at the center of our Solar System. It gives us light and heat.",
+      "keywords": ["sun", "star", "hot"]
+    },
+    {
+      "q": "How many planets are there?",
+      "a": "There are 8 planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune.",
+      "keywords": ["eight", "planets", "how many", "names"]
+    },
+    {
+      "q": "Which is the biggest planet?",
+      "a": "Jupiter is the biggest planet - more than 1300 Earths could fit inside it!",
+      "keywords": ["jupiter", "biggest", "largest"]
+    },
+    {
+      "q": "Which planet has rings?",
+      "a": "Saturn is famous for its bright rings made of billions of pieces of ice and rock. Jupiter, Uranus and Neptune have faint rings too.",
+      "keywords": ["saturn", "rings"]
+    },
+    {
+      "q": "Why is Mars red?",
+      "a": "Mars is called the Red Planet because its surface is covered in rusty iron dust that makes it look red.",
+      "keywords": ["mars", "red", "rust"]
+    },
+    {
+      "q": "Why does the Moon shine?",
+      "a": "The Moon does not make its own light. It shines because it reflects light from the Sun.",
+      "keywords": ["moon", "shine", "reflect", "light"]
+    },
+    {
+      "q": "What is a day?",
+      "a": "A day is one full spin of the Earth, which takes 24 hours. When your side of Earth faces the Sun it is daytime.",
+      "keywords": ["day", "spin", "rotate", "24"]
+    },
+    {
+      "q": "What is a year?",
+      "a": "A year is one full trip of the Earth around the Sun. It takes about 365 days.",
+      "keywords": ["year", "orbit", "365"]
+    },
+    {
+      "q": "What are rocky planets and gas giants?",
+      "a": "Mercury, Venus, Earth and Mars are small rocky planets near the Sun. Jupiter, Saturn, Uranus and Neptune are huge gas giants far away.",
+      "keywords": ["rocky", "gas", "giants"]
+    },
+    {
+      "q": "Is Pluto a planet?",
+      "a": "Pluto used to be called the ninth planet, but since 2006 it is classified as a dwarf planet.",
+      "keywords": ["pluto", "dwarf"]
+    },
+    {
+      "q": "What is the closest planet to the Sun?",
+      "a": "Mercury is the closest planet to the Sun. It is also the smallest planet.",
+      "keywords": ["mercury", "closest", "smallest"]
+    }
+  ]
+}

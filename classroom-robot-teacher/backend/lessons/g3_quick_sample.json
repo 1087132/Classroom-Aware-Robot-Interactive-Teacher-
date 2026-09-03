@@ -1,0 +1,256 @@
+{
+  "id": "g3_quick_sample",
+  "title": "G3 Quick Sample",
+  "subject": "Mathematics",
+  "grade": "Grade 3",
+  "topic_label": "G3 Quick Sample",
+  "duration_min": 20,
+  "greeting": "Hello class! I am CAT. Today's lesson comes straight from your textbook: G3 Quick Sample. Let's begin!",
+  "closing": "Wonderful work today! You practiced your textbook like champions!",
+  "source_pdf": "Mathematics-grade 3 - Part 1 - PUPIL(2017).pdf",
+  "flow": [
+    {
+      "type": "content",
+      "title": "i Foreword We have the pleasure to offer you a brand new col...",
+      "body": "i Foreword We have the pleasure to offer you a brand new collection of textbooks as from 2016. These textbooks have been written by a team of experts and supported by experienced Educators, advised by Inspectors, mentors and Deputy Head Masters. We have done our best to ensure that children undergo a pleasant learning ",
+      "speak": "i Foreword We have the pleasure to offer you a brand new collection of textbooks as from 2016. These textbooks have been written by a team of experts and supported by experienced Educators, advised by"
+    },
+    {
+      "type": "question",
+      "question_id": "q1"
+    },
+    {
+      "type": "content",
+      "title": "We have taken care to align the textbooks with very clearly ...",
+      "body": "We have taken care to align the textbooks with very clearly defined learning outcomes and objectives set for the subject. This present textbook provides clear indications of the diverse skills that children should master at each stage. We would request teachers to use the techniques and pedagogical approaches suggested",
+      "speak": "We have taken care to align the textbooks with very clearly defined learning outcomes and objectives set for the subject. This present textbook provides clear indications of the diverse skills that ch"
+    },
+    {
+      "type": "question",
+      "question_id": "q2"
+    },
+    {
+      "type": "content",
+      "title": "We are extremely thankful to all those who have provided us ...",
+      "body": "We are extremely thankful to all those who have provided us with constructive feedback, thereby enabling us to make this curriculum development endeavour come to fruition. We are also thankful to the artists who carried out the illustrations, and to our graphic artists, who have tried their best to create the right lay",
+      "speak": "We are extremely thankful to all those who have provided us with constructive feedback, thereby enabling us to make this curriculum development endeavour come to fruition. We are also thankful to the "
+    },
+    {
+      "type": "question",
+      "question_id": "q3"
+    }
+  ],
+  "questions": [
+    {
+      "text": "How many children are in the class?",
+      "options": [
+        "3 children",
+        "10 children",
+        "1 child",
+        "5"
+      ],
+      "answer": 3,
+      "explanation": "There are indeed 5 children in the class.",
+      "based_on": "There are 5 children in the class.",
+      "id": "q1",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "many",
+        "all",
+        "pupils",
+        "children",
+        "bus"
+      ]
+    },
+    {
+      "text": "How many sides does a square have?",
+      "options": [
+        "4",
+        "5",
+        "1",
+        "3"
+      ],
+      "answer": 0,
+      "explanation": "A square by definition has 4 sides and 4 corners.",
+      "based_on": "A square has 4 sides and 4 vertices.",
+      "id": "q2",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "no",
+        "square",
+        "triangle",
+        "rectangle",
+        "circle"
+      ]
+    },
+    {
+      "text": "What is the number of vertices and sides of Shape A?",
+      "options": [
+        "3 vertices and 4 sides",
+        "4",
+        "6 vertices and 2 sides",
+        "5 vertices and 3 sides"
+      ],
+      "answer": 1,
+      "explanation": "Shape A has 4 vertices and 4 sides.",
+      "based_on": "Shape A has 4 vertices and 4 sides.",
+      "id": "q3",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "shape",
+        "vertices",
+        "sides",
+        "look",
+        "shapes"
+      ]
+    }
+  ],
+  "knowledge_base": [
+    {
+      "q": "Professor Vassen NA\u00cbCK - Head Curriculum Implementation, Textbook Development and Evaluati",
+      "a": "Professor Vassen NA\u00cbCK - Head Curriculum Implementation, Textbook Development and Evaluation THE MATHEMATICS PANEL MAURITIUS INSTITUTE OF EDUCATION Dr. NENDURADU - Panel Coordinator, Senior Lecturer Ms S. DESCUBES - Primary Educator Ms. T CHEETAMUN - Primary Educator Ms. APPADOO - Mentor BUREAU DE L '\u00c9DUCATION CATHOLIQUE Mr. FOKEERBUX - School Inspector Mr D. MOHANGOO - School Inspector Mr K.",
+      "keywords": [
+        "ms",
+        "mr",
+        "panel",
+        "primary",
+        "educator"
+      ]
+    },
+    {
+      "q": "OOCHIT - School Inspector MAURITIUS INSTITUTE OF EDUCATION Mr R.",
+      "a": "OOCHIT - School Inspector MAURITIUS INSTITUTE OF EDUCATION Mr R. 978-99949-40-23-3 \u00a9 Mauritius Institute of Education (2017)",
+      "keywords": [
+        "mauritius",
+        "institute",
+        "education",
+        "oochit",
+        "school"
+      ]
+    },
+    {
+      "q": "i Foreword We have the pleasure to offer you a brand new collection of textbooks as from 2",
+      "a": "i Foreword We have the pleasure to offer you a brand new collection of textbooks as from 2016. These textbooks have been written by a team of experts and supported by experienced Educators, advised by Inspectors, mentors and Deputy Head Masters. We have done our best to ensure that children undergo a pleasant learning experience.",
+      "keywords": [
+        "textbooks",
+        "foreword",
+        "pleasure",
+        "offer",
+        "brand"
+      ]
+    },
+    {
+      "q": "We have taken care to align the textbooks with very clearly defined learning outcomes and ",
+      "a": "We have taken care to align the textbooks with very clearly defined learning outcomes and objectives set for the subject. This present textbook provides clear indications of the diverse skills that children should master at each stage. We would request teachers to use the techniques and pedagogical approaches suggested in the teacher\u2019s manual so that children make optimal use of the textbook and materials provided.",
+      "keywords": [
+        "textbook",
+        "children",
+        "use",
+        "taken",
+        "care"
+      ]
+    },
+    {
+      "q": "We are extremely thankful to all those who have provided us with constructive feedback, th",
+      "a": "We are extremely thankful to all those who have provided us with constructive feedback, thereby enabling us to make this curriculum development endeavour come to fruition. We are also thankful to the artists who carried out the illustrations, and to our graphic artists, who have tried their best to create the right layout for the books. The authors and the curriculum team, under the guidance of Professor Vassen Naeck, also deserve our thanks.",
+      "keywords": [
+        "thankful",
+        "curriculum",
+        "also",
+        "artists",
+        "extremely"
+      ]
+    },
+    {
+      "q": "\u2022 Manipulate, represent, describe and explore various 2-D shapes \u2022 Identify, name, describ",
+      "a": "\u2022 Manipulate, represent, describe and explore various 2-D shapes \u2022 Identify, name, describe and classify 2-D shapes (rectangle, square, circle and triangle) \u2022 Draw and manipulate basic 2-D shapes using ICT \u2022 Use, read and interpret pictograms \u2022 Use ICT to create pictograms representing real-life situations \u2022 Recognise, read and write the numbers up to 1 000 in numerals and in words \u2022 Count, compare and order numbers up to 1000 \u2022 Illustrate the meaning of place value (up to 1000) with and without use of ICT \u2022 Recognise and complete patterns in number sequences up to 1000 \u2022 Represent 2-digit and 3-digit numbers on an abacus/number house \u2022 Use ICT to represent 2-digit/3-digit numbers on an abacus \u2022 Perform the two arithmetic operations Addition and Subtraction - Add 2 numbers (up to 3 digits) with and without carrying - Subtract 2 numbers (up to 3 digits) with and without borrowing - Solve one-step routine and non-routine word problem involving the 2 operations (addition;subtraction) \u2022 Perform and describe mental calculations involving the 2 operations \u2022 Write numbers from 1 to 1000 and perform the 2 arithmetic operations using ICT \u2022 Estimate, compare and measure mass (kg/g) \u2022 Solve simple word problems involving mass.",
+      "keywords": [
+        "numbers",
+        "up",
+        "ict",
+        "use",
+        "1000"
+      ]
+    },
+    {
+      "q": "X Geometry 1 Observe carefully and discuss the picture.",
+      "a": "X Geometry 1 Observe carefully and discuss the picture. What shapes can you see in the picture? 1 2 Shapes Anna and Tom are playing in the classroom. My building block is rectangular.\u201d Tom: \u201cMy puzzle piece is triangular.\u201d Look at this picture.",
+      "keywords": [
+        "picture",
+        "shapes",
+        "tom",
+        "geometry",
+        "observe"
+      ]
+    },
+    {
+      "q": "Look at these shapes and fill in the blanks.",
+      "a": "Look at these shapes and fill in the blanks. Shape A has ________ vertices and ________ sides. Shape B has ________ vertices and ________ sides. Shape C has ________ vertices and ________ sides.",
+      "keywords": [
+        "shape",
+        "vertices",
+        "sides",
+        "look",
+        "shapes"
+      ]
+    },
+    {
+      "q": "Square Triangle Rectangle Circle A ________________ has 3 sides and 3 vertices.",
+      "a": "Square Triangle Rectangle Circle A ________________ has 3 sides and 3 vertices. A ________________ has no side and no vertex.",
+      "keywords": [
+        "no",
+        "square",
+        "triangle",
+        "rectangle",
+        "circle"
+      ]
+    },
+    {
+      "q": "X 14 Observe carefully and discuss the picture.",
+      "a": "X 14 Observe carefully and discuss the picture. 1 Pictogram Mr Sam, the teacher, has asked all the boys to stand on the left side of the class and all the girls to stand on the right side. Look at this picture and complete. Boys Girls One boy One girl",
+      "keywords": [
+        "picture",
+        "all",
+        "boys",
+        "stand",
+        "side"
+      ]
+    },
+    {
+      "q": "X Graph 15 Observe the shapes I count the number of each shape.",
+      "a": "X Graph 15 Observe the shapes I count the number of each shape. Circle Square Triangle Rectangle Number of Circles = ______ Number of Squares = ______ Number of Triangles = ______ Number of Rectangles = ______ .",
+      "keywords": [
+        "number",
+        "graph",
+        "15",
+        "observe",
+        "shapes"
+      ]
+    },
+    {
+      "q": "The chart shows the number of fruits in a box.",
+      "a": "The chart shows the number of fruits in a box. Draw and complete the chart below. Apple Banana Guava Pineapple There are 5 apples. There are ______ bananas There are ______ pineapples. Handball Volleyball Basketball Football represents 1 pupil",
+      "keywords": [
+        "chart",
+        "shows",
+        "number",
+        "fruits",
+        "box"
+      ]
+    },
+    {
+      "q": "X Graph 17 How many children are there in all?",
+      "a": "X Graph 17 How many children are there in all? Introducing \"In all\" or \"Altogether\" There are 5 children in all. The chart shows how pupils in Standard 3 come to school everyday. By bus By car On foot By van Complete: How many pupils travel by bus? _________ How many pupils travel by van? _________ How many pupils are there in all in the class?",
+      "keywords": [
+        "many",
+        "all",
+        "pupils",
+        "children",
+        "bus"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CAT - Teacher Login</title>
+<link rel="stylesheet" href="/static/style.css?v=22" />
+<style>
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .login-card { width: min(400px, 92vw); padding: 30px; }
+  .logo-row { text-align: center; margin-bottom: 18px; }
+  .logo-row .robot { font-size: 54px; }
+  .logo-row h1 { font-size: 20px; margin: 10px 0 4px; }
+  .logo-row p { color: var(--muted); font-size: 13px; margin: 0; }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 14px 0 6px;
+          text-transform: uppercase; letter-spacing: .06em; }
+  .err { display: none; margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+         background: rgba(248,113,113,.12); border: 1px solid rgba(248,113,113,.4);
+         color: var(--red); font-size: 13px; }
+  .hint { margin-top: 16px; padding: 10px 12px; border-radius: 10px; font-size: 12px;
+          background: rgba(34,211,238,.07); border: 1px solid rgba(34,211,238,.25);
+          color: var(--muted); }
+  .hint b { color: var(--cyan); }
+  #loginBtn { width: 100%; font-size: 16px; padding: 13px; margin-top: 20px; }
+  .backlink { display: block; text-align: center; margin-top: 14px; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="card login-card">
+  <div class="logo-row">
+    <div class="robot">&#129302;</div>
+    <h1>Teacher Login</h1>
+    <p>Classroom-Aware Interactive Robot Teacher</p>
+  </div>
+
+  <label for="username">Username</label>
+  <input type="text" id="username" placeholder="teacher" autocomplete="username" />
+
+  <label for="password">Password</label>
+  <input type="password" id="password" placeholder="********" autocomplete="current-password" />
+
+  <div class="err" id="err"></div>
+
+  <button class="btn btn-primary" id="loginBtn">Sign in &#8594;</button>
+
+  <div class="hint">
+    First run? Default account is <b>teacher</b> / <b>teach123</b>.
+    Only teacher pages need login - student, robot and projector screens stay open.
+  </div>
+  <a class="backlink" href="/">&#8592; back to home</a>
+</div>
+
+<script src="/static/common.js?v=22"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const next = new URLSearchParams(location.search).get("next") || "/teacher";
+
+  async function doLogin() {
+    $("err").style.display = "none";
+    $("loginBtn").disabled = true;
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: $("username").value, password: $("password").value }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Login failed");
+      location.href = next.startsWith("/") ? next : "/teacher";
+    } catch (e) {
+      $("err").textContent = e.message;
+      $("err").style.display = "block";
+      $("loginBtn").disabled = false;
+    }
+  }
+  $("loginBtn").onclick = doLogin;
+  document.addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+  $("username").focus();
+</script>
+</body>
+</html>

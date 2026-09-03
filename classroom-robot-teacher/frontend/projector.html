@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CAT - Projector</title>
+<link rel="stylesheet" href="/static/style.css?v=22" />
+<style>
+  body { overflow: hidden; }
+  .layout {
+    display: grid; grid-template-columns: 1fr 250px; gap: 18px;
+    height: 100vh; padding: 22px;
+  }
+  .stage { display: flex; flex-direction: column; }
+  .stage-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding-left: 46px; }
+  .stage-head .title { font-size: 20px; font-weight: 800; }
+  .main.card { flex: 1; display: flex; flex-direction: column; justify-content: center;
+    align-items: center; text-align: center; padding: 40px; position: relative; overflow: hidden; }
+
+  .big-title { font-size: clamp(26px, 4.2vw, 52px); font-weight: 800; margin-bottom: 18px; }
+  .big-body { font-size: clamp(17px, 2.1vw, 26px); color: #3d4d6d; line-height: 1.55; max-width: 900px; }
+
+  .q-text { font-size: clamp(24px, 3.6vw, 44px); font-weight: 800; margin-bottom: 30px; max-width: 1000px; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: min(860px, 100%); }
+  .opt {
+    display: flex; align-items: center; gap: 14px; padding: 18px 20px;
+    border-radius: 14px; border: 1px solid var(--line); background: var(--card2);
+    font-size: clamp(16px, 2vw, 24px); font-weight: 700; text-align: left;
+  }
+  .opt .key {
+    width: 40px; height: 40px; flex: none; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: #06202a;
+  }
+  .k0 { background: #22d3ee; } .k1 { background: #a78bfa; }
+  .k2 { background: #fbbf24; } .k3 { background: #34d399; }
+  .opt.correct { border-color: var(--green); background: rgba(52,211,153,.14); }
+  .opt.dim { opacity: .35; }
+
+  .dist { height: 8px; border-radius: 99px; background: rgba(148,163,184,.15); margin-top: 8px; width: 100%; overflow: hidden; }
+  .dist > div { height: 100%; background: var(--cyan); border-radius: 99px; }
+  .opt-col { display: flex; flex-direction: column; align-items: stretch; flex: 1; }
+
+  .timer-row { display: flex; align-items: center; gap: 14px; width: min(860px, 100%); margin-top: 30px; }
+  .timer-num { font-size: 34px; font-weight: 800; color: var(--cyan); min-width: 64px; }
+  .timer-row .timerbar { flex: 1; }
+  .answers-chip { font-size: 16px; color: var(--muted); }
+
+  .minigame-banner {
+    position: absolute; top: 18px; left: 0; right: 0; display: flex; justify-content: center;
+  }
+  .side { display: flex; flex-direction: column; gap: 16px; }
+  .qr { text-align: center; }
+  .qr img { width: 170px; height: 170px; background: #fff; border-radius: 12px; padding: 8px; }
+  .qr .url { font-size: 11px; color: var(--cyan); word-break: break-all; margin-top: 6px; }
+  .engage { text-align: center; }
+  .engage .num { font-size: 42px; font-weight: 800; }
+  .subtitle-bar {
+    margin-top: 14px; min-height: 44px; text-align: center; color: #0e7490;
+    font-size: 16px; font-style: italic;
+  }
+  [data-theme="dark"] .big-body { color: #c6d4ea; }
+  [data-theme="dark"] .subtitle-bar { color: #9fd8e6; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <div class="stage">
+    <div class="stage-head">
+      <span style="font-size:26px">&#129302;</span>
+      <span class="title" id="lessonTitle">CAT Projector</span>
+      <span class="badge badge-cyan" id="statusBadge">waiting</span>
+      <span class="spacer"></span>
+      <span class="answers-chip" id="answersChip"></span>
+    </div>
+
+    <div class="main card" id="main">
+      <div class="big-title">Welcome to class! &#127891;</div>
+      <div class="big-body">Scan the QR code with your phone or tablet to join.<br />
+        The lesson will begin soon...</div>
+    </div>
+    <div class="subtitle-bar" id="robotSub"></div>
+  </div>
+
+  <div class="side">
+    <div class="card qr">
+      <h3>Join the class</h3>
+      <img src="/api/qr.svg?path=/student" alt="QR" />
+      <div class="url" id="joinUrl"></div>
+    </div>
+    <div class="card engage">
+      <h3>Class engagement</h3>
+      <div class="num" id="classScore">-</div>
+      <div class="muted" id="classAtt">attention -</div>
+    </div>
+    <div class="card">
+      <h3>Top scores</h3>
+      <div id="leaders" class="muted" style="font-size:14px">No scores yet</div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/common.js?v=22"></script>
+<script>
+  const main = document.getElementById("main");
+  const KEYS = ["A", "B", "C", "D", "E", "F"];
+  let curQ = null;
+
+  api("/api/info").then(i => document.getElementById("joinUrl").textContent = i.student_url);
+
+  function showStage(title, body, emoji) {
+    curQ = null;
+    main.innerHTML = `<div class="big-title">${emoji || ""} ${esc(title)}</div>
+                      <div class="big-body">${esc(body).replace(/\n/g, "<br/>")}</div>`;
+  }
+
+  function showQuestion(q) {
+    curQ = q;
+    const target = q.target ? `<div class="badge badge-purple" style="font-size:15px;margin-bottom:14px">
+        &#127919; Special question for ${esc(q.target.name)}!</div>` : "";
+    const mg = q.is_minigame ? `<div class="minigame-banner"><span class="badge badge-yellow" style="font-size:15px">
+        &#9889; MINI-GAME - DOUBLE POINTS &#9889;</span></div>` : "";
+    main.innerHTML = `${mg}${target}
+      <div class="q-text">${esc(q.text)}</div>
+      <div class="opts">${q.options.map((o, i) => `
+        <div class="opt" data-i="${i}"><span class="key k${i}">${KEYS[i]}</span><span>${esc(o)}</span></div>`).join("")}
+      </div>
+      <div class="timer-row">
+        <span class="timer-num" id="timerNum">${q.time_limit}</span>
+        <div class="timerbar" id="timerBar"><div style="width:100%"></div></div>
+      </div>`;
+  }
+
+  function showResults(r) {
+    curQ = null;
+    const total = r.distribution.reduce((a, b) => a + b, 0) || 1;
+    main.innerHTML = `
+      <div class="q-text" style="font-size:clamp(20px,2.6vw,34px)">${esc(r.text)}</div>
+      <div class="opts">${r.options.map((o, i) => `
+        <div class="opt ${i === r.correct_index ? "correct" : "dim"}">
+          <span class="key k${i}">${KEYS[i]}</span>
+          <span class="opt-col"><span>${esc(o)} ${i === r.correct_index ? "&#10004;" : ""}</span>
+            <span class="dist"><div style="width:${(r.distribution[i] / total) * 100}%"></div></span>
+            <span class="muted" style="font-size:13px">${r.distribution[i]} answer(s)</span>
+          </span>
+        </div>`).join("")}
+      </div>
+      <div class="big-body" style="margin-top:24px">&#128161; ${esc(r.explanation)}</div>
+      <div class="muted" style="margin-top:10px">${r.correct}/${r.answers} answered correctly</div>`;
+  }
+
+  connectWS("projector", (ev) => {
+    switch (ev.type) {
+      case "state":
+        if (ev.lesson) document.getElementById("lessonTitle").textContent = ev.lesson.title;
+        document.getElementById("statusBadge").textContent = ev.status;
+        if (ev.status === "question" && ev.question) showQuestion(ev.question);
+        break;
+      case "stage":
+        document.getElementById("statusBadge").textContent = ev.stage;
+        showStage(ev.title, ev.body, {greeting:"&#128075;", ended:"&#127881;", minigame:"&#9889;", paused:"&#9208;"}[ev.stage] || "&#128218;");
+        break;
+      case "question_open": showQuestion(ev.question); break;
+      case "question_closed": showResults(ev.results); break;
+      case "question_tick": {
+        const bar = document.getElementById("timerBar");
+        const num = document.getElementById("timerNum");
+        if (bar && curQ) {
+          num.textContent = ev.remaining_s;
+          bar.firstElementChild.style.width = (ev.remaining_s / curQ.time_limit) * 100 + "%";
+          bar.classList.toggle("low", ev.remaining_s <= 5);
+        }
+        document.getElementById("answersChip").textContent =
+          `${ev.answers}/${ev.students} answered`;
+        break;
+      }
+      case "answer_received":
+        document.getElementById("answersChip").textContent = `${ev.count}/${ev.total} answered`;
+        break;
+      case "engagement": {
+        document.getElementById("classScore").textContent = ev.class_score + "%";
+        document.getElementById("classScore").style.color =
+          ev.class_score >= 70 ? "var(--green)" : ev.class_score >= 45 ? "var(--yellow)" : "var(--red)";
+        document.getElementById("classAtt").textContent = `attention ${ev.class_attention}%`;
+        const top = [...ev.students].sort((a, b) => b.points - a.points).slice(0, 5);
+        document.getElementById("leaders").innerHTML = top.length
+          ? top.map((s, i) => `<div class="row" style="justify-content:space-between;padding:3px 0">
+              <span>${["&#129351;","&#129352;","&#129353;","&#11088;","&#11088;"][i]} ${esc(s.name)}</span>
+              <b>${s.points} pts</b></div>`).join("")
+          : "No scores yet";
+        break;
+      }
+      case "speak":
+        document.getElementById("robotSub").textContent = "\u{1F916} " + ev.text;
+        break;
+    }
+  });
+</script>
+</body>
+</html>

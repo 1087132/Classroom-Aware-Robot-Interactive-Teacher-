@@ -1,0 +1,1008 @@
+{
+  "id": "grade3_math",
+  "title": "Grade 3 Mathematics - Part 1",
+  "subject": "Mathematics",
+  "grade": "Grade 3",
+  "topic_label": "Grade 3 Mathematics - Part 1",
+  "duration_min": 20,
+  "greeting": "Hello class! I am CAT. Today's lesson comes straight from your textbook: Grade 3 Mathematics - Part 1. Let's begin!",
+  "closing": "Wonderful work today! You practiced your textbook like champions!",
+  "source_pdf": "Mathematics-grade 3 - Part 1 - PUPIL(2017).pdf",
+  "flow": [
+    {
+      "type": "content",
+      "title": "Numbers Subtraction Do you remember? When you have to subtra...",
+      "body": "Numbers Subtraction Do you remember? When you have to subtract any number of items, you may cross the number of items you need to remove. Sandy takes one of them. Five take away one makes four I take one balloon. How many balloons have you left? There were five balloons and Sandy takes one of them. Therefore, Aurelie h",
+      "speak": "Numbers Subtraction Do you remember? When you have to subtract any number of items, you may cross the number of items you need to remove. Sandy takes one of them. Five take away one makes four I take "
+    },
+    {
+      "type": "question",
+      "question_id": "q1"
+    },
+    {
+      "type": "question",
+      "question_id": "q2"
+    },
+    {
+      "type": "content",
+      "title": "Numbers 51 tens units Remember, Friends! Do you remember the...",
+      "body": "Numbers 51 tens units Remember, Friends! Do you remember the \"Number House\" with the \"tens\" and \"units\" place value? Create your own Number House units tens Create your own Number House . plastic cups, straws, glue, marker, elastic bands and a piece of cardboard. A bundle of ten straws: Now we will represent a bundle o",
+      "speak": "Numbers 51 tens units Remember, Friends! Do you remember the \"Number House\" with the \"tens\" and \"units\" place value? Create your own Number House units tens Create your own Number House . plastic cups"
+    },
+    {
+      "type": "question",
+      "question_id": "q3"
+    },
+    {
+      "type": "question",
+      "question_id": "q4"
+    },
+    {
+      "type": "content",
+      "title": "i Foreword We have the pleasure to offer you a brand new col...",
+      "body": "i Foreword We have the pleasure to offer you a brand new collection of textbooks as from 2016. These textbooks have been written by a team of experts and supported by experienced Educators, advised by Inspectors, mentors and Deputy Head Masters. We have done our best to ensure that children undergo a pleasant learning ",
+      "speak": "i Foreword We have the pleasure to offer you a brand new collection of textbooks as from 2016. These textbooks have been written by a team of experts and supported by experienced Educators, advised by"
+    },
+    {
+      "type": "question",
+      "question_id": "q5"
+    },
+    {
+      "type": "question",
+      "question_id": "q6"
+    },
+    {
+      "type": "question",
+      "question_id": "q7"
+    },
+    {
+      "type": "question",
+      "question_id": "q8"
+    }
+  ],
+  "questions": [
+    {
+      "text": "How many children are in the class?",
+      "options": [
+        "5",
+        "3",
+        "2",
+        "10"
+      ],
+      "answer": 0,
+      "explanation": "There are always 5 children in the class, no matter what.",
+      "based_on": "There are 5 children in the class.",
+      "id": "q1",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "many",
+        "all",
+        "pupils",
+        "children",
+        "bus"
+      ]
+    },
+    {
+      "text": "When you put two groups of items together, how do you get the number of things in both groups?",
+      "options": [
+        "the number of things in neither group",
+        "the amount in all",
+        "the number of things in both groups combined",
+        "the number of things in one group"
+      ],
+      "answer": 1,
+      "explanation": "When you combine two groups, you get the total number of things in both groups.",
+      "based_on": "When you put two groups of items together, you get the \"amount in all\" or \"total amount\".",
+      "id": "q2",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "seashells",
+        "all",
+        "sixteen",
+        "amount",
+        "numbers"
+      ]
+    },
+    {
+      "text": "How many sides does a square have?",
+      "options": [
+        "5",
+        "10",
+        "3",
+        "4"
+      ],
+      "answer": 3,
+      "explanation": "A square by definition has 4 sides and 4 vertices.",
+      "based_on": "A square has 4 sides and 4 vertices.",
+      "id": "q3",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "no",
+        "square",
+        "triangle",
+        "rectangle",
+        "circle"
+      ]
+    },
+    {
+      "text": "When subtracting two numbers, what must you put the numerals in?",
+      "options": [
+        "the left place",
+        "the right place",
+        "at random",
+        "in order"
+      ],
+      "answer": 1,
+      "explanation": "When you subtract two numbers, the numerals need to be in the correct order.",
+      "based_on": "When subtracting two numbers, you need to put the numerals in the right place.",
+      "id": "q4",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "columns",
+        "numbers",
+        "subtract",
+        "424",
+        "tens"
+      ]
+    },
+    {
+      "text": "What is the minimum number of sides a shape must have to be called a triangle?",
+      "options": [
+        "4",
+        "2",
+        "3",
+        "5"
+      ],
+      "answer": 2,
+      "explanation": "A triangle by definition has three sides.",
+      "based_on": "A shape with 3 sides is a triangle.",
+      "id": "q5",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "shape",
+        "vertices",
+        "sides",
+        "look",
+        "shapes"
+      ]
+    },
+    {
+      "text": "How many coins are in the bag?",
+      "options": [
+        "5 coins",
+        "1 coin",
+        "887",
+        "1000 coins"
+      ],
+      "answer": 2,
+      "explanation": "We know there are 887 coins because we counted them.",
+      "based_on": "There are 887 coins in the bag.",
+      "id": "q6",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "coins",
+        "bag",
+        "write",
+        "columns",
+        "work"
+      ]
+    },
+    {
+      "text": "When adding numbers in columns, how do you start adding the numbers?",
+      "options": [
+        "by multiplying the numbers",
+        "by adding the units first",
+        "by adding the tens first",
+        "by ignoring the numbers"
+      ],
+      "answer": 1,
+      "explanation": "You start adding the numbers by adding the units first and then the tens.",
+      "based_on": "When adding numbers in columns, you add the units first and then the tens.",
+      "id": "q7",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "add",
+        "columns",
+        "place",
+        "numbers",
+        "65"
+      ]
+    },
+    {
+      "text": "If you have 385 animals and you take away 378, how many animals will you have left?",
+      "options": [
+        "1000 animals",
+        "7",
+        "0 animals",
+        "385 animals"
+      ],
+      "answer": 1,
+      "explanation": "If you take away 378 animals from 385, you will be left with 7 animals.",
+      "based_on": "If you have 385 animals and you take away 378, you will have 7 animals left.",
+      "id": "q8",
+      "time_limit": 30,
+      "difficulty": "easy",
+      "keywords": [
+        "zoo",
+        "animals",
+        "subtracting",
+        "borrowing",
+        "involving"
+      ]
+    }
+  ],
+  "knowledge_base": [
+    {
+      "q": "Professor Vassen NA\u00cbCK - Head Curriculum Implementation, Textbook Development and Evaluati",
+      "a": "Professor Vassen NA\u00cbCK - Head Curriculum Implementation, Textbook Development and Evaluation THE MATHEMATICS PANEL MAURITIUS INSTITUTE OF EDUCATION Dr. NENDURADU - Panel Coordinator, Senior Lecturer Ms S. DESCUBES - Primary Educator Ms. T CHEETAMUN - Primary Educator Ms. APPADOO - Mentor BUREAU DE L '\u00c9DUCATION CATHOLIQUE Mr. FOKEERBUX - School Inspector Mr D. MOHANGOO - School Inspector Mr K.",
+      "keywords": [
+        "ms",
+        "mr",
+        "panel",
+        "primary",
+        "educator"
+      ]
+    },
+    {
+      "q": "OOCHIT - School Inspector MAURITIUS INSTITUTE OF EDUCATION Mr R.",
+      "a": "OOCHIT - School Inspector MAURITIUS INSTITUTE OF EDUCATION Mr R. 978-99949-40-23-3 \u00a9 Mauritius Institute of Education (2017)",
+      "keywords": [
+        "mauritius",
+        "institute",
+        "education",
+        "oochit",
+        "school"
+      ]
+    },
+    {
+      "q": "i Foreword We have the pleasure to offer you a brand new collection of textbooks as from 2",
+      "a": "i Foreword We have the pleasure to offer you a brand new collection of textbooks as from 2016. These textbooks have been written by a team of experts and supported by experienced Educators, advised by Inspectors, mentors and Deputy Head Masters. We have done our best to ensure that children undergo a pleasant learning experience.",
+      "keywords": [
+        "textbooks",
+        "foreword",
+        "pleasure",
+        "offer",
+        "brand"
+      ]
+    },
+    {
+      "q": "We have taken care to align the textbooks with very clearly defined learning outcomes and ",
+      "a": "We have taken care to align the textbooks with very clearly defined learning outcomes and objectives set for the subject. This present textbook provides clear indications of the diverse skills that children should master at each stage. We would request teachers to use the techniques and pedagogical approaches suggested in the teacher\u2019s manual so that children make optimal use of the textbook and materials provided.",
+      "keywords": [
+        "textbook",
+        "children",
+        "use",
+        "taken",
+        "care"
+      ]
+    },
+    {
+      "q": "We are extremely thankful to all those who have provided us with constructive feedback, th",
+      "a": "We are extremely thankful to all those who have provided us with constructive feedback, thereby enabling us to make this curriculum development endeavour come to fruition. We are also thankful to the artists who carried out the illustrations, and to our graphic artists, who have tried their best to create the right layout for the books. The authors and the curriculum team, under the guidance of Professor Vassen Naeck, also deserve our thanks.",
+      "keywords": [
+        "thankful",
+        "curriculum",
+        "also",
+        "artists",
+        "extremely"
+      ]
+    },
+    {
+      "q": "\u2022 Manipulate, represent, describe and explore various 2-D shapes \u2022 Identify, name, describ",
+      "a": "\u2022 Manipulate, represent, describe and explore various 2-D shapes \u2022 Identify, name, describe and classify 2-D shapes (rectangle, square, circle and triangle) \u2022 Draw and manipulate basic 2-D shapes using ICT \u2022 Use, read and interpret pictograms \u2022 Use ICT to create pictograms representing real-life situations \u2022 Recognise, read and write the numbers up to 1 000 in numerals and in words \u2022 Count, compare and order numbers up to 1000 \u2022 Illustrate the meaning of place value (up to 1000) with and without use of ICT \u2022 Recognise and complete patterns in number sequences up to 1000 \u2022 Represent 2-digit and 3-digit numbers on an abacus/number house \u2022 Use ICT to represent 2-digit/3-digit numbers on an abacus \u2022 Perform the two arithmetic operations Addition and Subtraction - Add 2 numbers (up to 3 digits) with and without carrying - Subtract 2 numbers (up to 3 digits) with and without borrowing - Solve one-step routine and non-routine word problem involving the 2 operations (addition;subtraction) \u2022 Perform and describe mental calculations involving the 2 operations \u2022 Write numbers from 1 to 1000 and perform the 2 arithmetic operations using ICT \u2022 Estimate, compare and measure mass (kg/g) \u2022 Solve simple word problems involving mass.",
+      "keywords": [
+        "numbers",
+        "up",
+        "ict",
+        "use",
+        "1000"
+      ]
+    },
+    {
+      "q": "X Geometry 1 Observe carefully and discuss the picture.",
+      "a": "X Geometry 1 Observe carefully and discuss the picture. What shapes can you see in the picture? 1 2 Shapes Anna and Tom are playing in the classroom. My building block is rectangular.\u201d Tom: \u201cMy puzzle piece is triangular.\u201d Look at this picture.",
+      "keywords": [
+        "picture",
+        "shapes",
+        "tom",
+        "geometry",
+        "observe"
+      ]
+    },
+    {
+      "q": "Look at these shapes and fill in the blanks.",
+      "a": "Look at these shapes and fill in the blanks. Shape A has ________ vertices and ________ sides. Shape B has ________ vertices and ________ sides. Shape C has ________ vertices and ________ sides.",
+      "keywords": [
+        "shape",
+        "vertices",
+        "sides",
+        "look",
+        "shapes"
+      ]
+    },
+    {
+      "q": "Square Triangle Rectangle Circle A ________________ has 3 sides and 3 vertices.",
+      "a": "Square Triangle Rectangle Circle A ________________ has 3 sides and 3 vertices. A ________________ has no side and no vertex.",
+      "keywords": [
+        "no",
+        "square",
+        "triangle",
+        "rectangle",
+        "circle"
+      ]
+    },
+    {
+      "q": "X 14 Observe carefully and discuss the picture.",
+      "a": "X 14 Observe carefully and discuss the picture. 1 Pictogram Mr Sam, the teacher, has asked all the boys to stand on the left side of the class and all the girls to stand on the right side. Look at this picture and complete. Boys Girls One boy One girl",
+      "keywords": [
+        "picture",
+        "all",
+        "boys",
+        "stand",
+        "side"
+      ]
+    },
+    {
+      "q": "X Graph 15 Observe the shapes I count the number of each shape.",
+      "a": "X Graph 15 Observe the shapes I count the number of each shape. Circle Square Triangle Rectangle Number of Circles = ______ Number of Squares = ______ Number of Triangles = ______ Number of Rectangles = ______ .",
+      "keywords": [
+        "number",
+        "graph",
+        "15",
+        "observe",
+        "shapes"
+      ]
+    },
+    {
+      "q": "The chart shows the number of fruits in a box.",
+      "a": "The chart shows the number of fruits in a box. Draw and complete the chart below. Apple Banana Guava Pineapple There are 5 apples. There are ______ bananas There are ______ pineapples. Handball Volleyball Basketball Football represents 1 pupil",
+      "keywords": [
+        "chart",
+        "shows",
+        "number",
+        "fruits",
+        "box"
+      ]
+    },
+    {
+      "q": "X Graph 17 How many children are there in all?",
+      "a": "X Graph 17 How many children are there in all? Introducing \"In all\" or \"Altogether\" There are 5 children in all. The chart shows how pupils in Standard 3 come to school everyday. By bus By car On foot By van Complete: How many pupils travel by bus? _________ How many pupils travel by van? _________ How many pupils are there in all in the class?",
+      "keywords": [
+        "many",
+        "all",
+        "pupils",
+        "children",
+        "bus"
+      ]
+    },
+    {
+      "q": "X 18 More/Less Who has more blocks?",
+      "a": "X 18 More/Less Who has more blocks? The chart shows the number of balloons that 5 children have. _______ has the greatest number of balloons. _______ has the smallest number of balloons. _______ and _______ have same number of balloons. There are _______ balloons in all. Raj Mira Zafir Lewis Amina",
+      "keywords": [
+        "balloons",
+        "number",
+        "more",
+        "18",
+        "less"
+      ]
+    },
+    {
+      "q": "Draw to complete the pictogram.",
+      "a": "Draw to complete the pictogram. The chart shows the number of fish each child has. Continuous Assessment Children Navin Roshan Sara Noor Azeeza Number of pencils 4 7 2 5 9 Navin Roshan Sara Noor Azeeza Sally Amir Alvin Reena",
+      "keywords": [
+        "number",
+        "navin",
+        "roshan",
+        "sara",
+        "noor"
+      ]
+    },
+    {
+      "q": "Who has the largest number of fish?",
+      "a": "Who has the largest number of fish? ___________ How many fish does Amir have? ___________ How many fish do Sally and Reena have altogether? ___________ How many fish are there in all? How many pupils like mango juice? _____________ Which 2 juices are preferred by the same number of pupils? _________________ and _________________ Which juice is preferred by the least number of pupils? _________ How many pupils are there in the class?",
+      "keywords": [
+        "many",
+        "fish",
+        "pupils",
+        "number",
+        "juice"
+      ]
+    },
+    {
+      "q": "The chart shows the favourite juice of pupils in a class.",
+      "a": "The chart shows the favourite juice of pupils in a class. Grape juice Apple juice Mango juice Orange juice Peach juice represents 1 pupil",
+      "keywords": [
+        "juice",
+        "chart",
+        "shows",
+        "favourite",
+        "pupils"
+      ]
+    },
+    {
+      "q": "10 tens 100 When you add 10 ten strips altogether, you get a hundred (one flat).",
+      "a": "10 tens 100 When you add 10 ten strips altogether, you get a hundred (one flat). How many ten strips are there? __________ What do ten tens give?",
+      "keywords": [
+        "ten",
+        "10",
+        "tens",
+        "strips",
+        "100"
+      ]
+    },
+    {
+      "q": "Create a table as follows: In a number bag, place flash cards showing a numeral between 0 ",
+      "a": "Create a table as follows: In a number bag, place flash cards showing a numeral between 0 to 99 and those number count in 100s; pull one then ask pupils to fill up the table with the numbers in the correct place value Note to Teacher This will be used to consolidate the concept of \"hundreds\", \"tens\" and \"units\" place value.",
+      "keywords": [
+        "place",
+        "table",
+        "number",
+        "value",
+        "create"
+      ]
+    },
+    {
+      "q": "4 hundreds, 2 tens and 5 units 6 hundreds, 4 tens and 7 units 2 hundreds, 5 tens and 1 uni",
+      "a": "4 hundreds, 2 tens and 5 units 6 hundreds, 4 tens and 7 units 2 hundreds, 5 tens and 1 unit 8 hundreds, 3 tens and 8 units 9 hundreds, 7 tens and 4 units : The first one has been done for you.",
+      "keywords": [
+        "hundreds",
+        "tens",
+        "units",
+        "unit",
+        "first"
+      ]
+    },
+    {
+      "q": "38 Write greater or smaller 105 242 521 611 102 245 531 512 is ____________ than is ______",
+      "a": "38 Write greater or smaller 105 242 521 611 102 245 531 512 is ____________ than is ____________ than is ____________ than is ____________ than Guess the number It is greater than 590. It is smaller than 600. It has 5 in the units place.",
+      "keywords": [
+        "than",
+        "greater",
+        "smaller",
+        "38",
+        "write"
+      ]
+    },
+    {
+      "q": "Two hundred and fifty six 701 Six hundred and ninety eight 470 Seven hundred and one 698 F",
+      "a": "Two hundred and fifty six 701 Six hundred and ninety eight 470 Seven hundred and one 698 Four hundred and seventy 823 Eight hundred and twenty three 256 135:",
+      "keywords": [
+        "hundred",
+        "six",
+        "eight",
+        "two",
+        "fifty"
+      ]
+    },
+    {
+      "q": "42 Using the digits only once, form as many 3-digit numbers as possible.",
+      "a": "42 Using the digits only once, form as many 3-digit numbers as possible. Using the table above, answer the following questions: a) Which number is the greatest? b) Which number is the smallest? c) Which two numbers have the smallest hundreds?",
+      "keywords": [
+        "using",
+        "numbers",
+        "number",
+        "smallest",
+        "42"
+      ]
+    },
+    {
+      "q": "Numbers 43 Ascending and Descending Order 900 800 700 600 500 400 100 200 300 400 500 600 ",
+      "a": "Numbers 43 Ascending and Descending Order 900 800 700 600 500 400 100 200 300 400 500 600 Ascending Descending Ascending order is when numbers are arranged from smallest to largest. Descending order is when numbers are arranged from largest to smallest.",
+      "keywords": [
+        "numbers",
+        "ascending",
+        "descending",
+        "order",
+        "600"
+      ]
+    },
+    {
+      "q": "46 One thousand If 9 hundreds make 900 then, 10 hundreds make 1000 999 1000 After This is ",
+      "a": "46 One thousand If 9 hundreds make 900 then, 10 hundreds make 1000 999 1000 After This is one thousand and it comes after 999.",
+      "keywords": [
+        "one",
+        "thousand",
+        "hundreds",
+        "make",
+        "1000"
+      ]
+    },
+    {
+      "q": "Numbers 51 tens units Remember, Friends!",
+      "a": "Numbers 51 tens units Remember, Friends! Do you remember the \"Number House\" with the \"tens\" and \"units\" place value? Create your own Number House units tens Create your own Number House . plastic cups, straws, glue, marker, elastic bands and a piece of cardboard. A bundle of ten straws: Now we will represent a bundle of ten red straws by a big blue straw.",
+      "keywords": [
+        "tens",
+        "units",
+        "number",
+        "house",
+        "straws"
+      ]
+    },
+    {
+      "q": "52 The Abacus tens units .",
+      "a": "52 The Abacus tens units . Your teacher will say a number and you will have to place the correct number of beads on the abacus. Then tell us how many tens and how many units are shown in the abacus. tens units Count the number of red beads and the number of blue beads. 2 tens and 3 units",
+      "keywords": [
+        "tens",
+        "units",
+        "number",
+        "abacus",
+        "beads"
+      ]
+    },
+    {
+      "q": "Numbers 53 tens units tens units tens units tens units tens units tens units tens units te",
+      "a": "Numbers 53 tens units tens units tens units tens units tens units tens units tens units tens units tens units 1. Complete the following by writing the correct numeral. Draw correct number beads on each abacus to show the given numeral.",
+      "keywords": [
+        "tens",
+        "units",
+        "correct",
+        "numeral",
+        "numbers"
+      ]
+    },
+    {
+      "q": "tens units tens units tens units units tens units tens units tens units tens units tens un",
+      "a": "tens units tens units tens units units tens units tens units tens units tens units tens units tens units tens units tens units tens",
+      "keywords": [
+        "tens",
+        "units"
+      ]
+    },
+    {
+      "q": "Numbers 55 Can you count the number of bundles?",
+      "a": "Numbers 55 Can you count the number of bundles? If 10 units make 1 ten then what will ten tens make? make make one hundred and after This is one hundred and it comes after 99.",
+      "keywords": [
+        "make",
+        "ten",
+        "one",
+        "hundred",
+        "after"
+      ]
+    },
+    {
+      "q": "Numbers 57 Tip 214 is shown on an abacus as follows.",
+      "a": "Numbers 57 Tip 214 is shown on an abacus as follows. 2 hundreds 1 ten and 4 units tens tenshundreds hundredsunits units tenshundreds units units tens hundreds 214 See how we will show \"hundreds\", \"tens\" and \"units\" on an abacus.",
+      "keywords": [
+        "units",
+        "hundreds",
+        "tens",
+        "214",
+        "abacus"
+      ]
+    },
+    {
+      "q": "Draw the correct number of beads.",
+      "a": "Draw the correct number of beads. Continuous Assessment Get some more practice with this game. Represent the numbers that the teacher will tell you on the abacus.",
+      "keywords": [
+        "draw",
+        "correct",
+        "number",
+        "beads",
+        "continuous"
+      ]
+    },
+    {
+      "q": "units tens hundreds units tens hundreds units tens hundreds units tens hundreds units tens",
+      "a": "units tens hundreds units tens hundreds units tens hundreds units tens hundreds units tens hundreds units tens hundreds units tens hundreds units tens hundreds units tens hundreds",
+      "keywords": [
+        "units",
+        "tens",
+        "hundreds"
+      ]
+    },
+    {
+      "q": "Numbers 63 Addition Let\u2019s count how many seashells we have in all.",
+      "a": "Numbers 63 Addition Let\u2019s count how many seashells we have in all. We have sixteen seashells in all. Eleven and five make sixteen. When you put two groups of items together, you get the \"amount in all\" or \"total amount\". 11 + 5 = 16 Mike and Kelly were at the beach collecting some seashells.",
+      "keywords": [
+        "seashells",
+        "all",
+        "sixteen",
+        "amount",
+        "numbers"
+      ]
+    },
+    {
+      "q": "4 tens and 2 units + 2 tens and 4 units = 6 tens and 6 units 42 + 24 = 66 In Grade 2, you ",
+      "a": "4 tens and 2 units + 2 tens and 4 units = 6 tens and 6 units 42 + 24 = 66 In Grade 2, you used number strips to carry out addition.",
+      "keywords": [
+        "tens",
+        "units",
+        "42",
+        "24",
+        "66"
+      ]
+    },
+    {
+      "q": "Numbers 65 When you have to add in columns, you have to place the numerals in the appropri",
+      "a": "Numbers 65 When you have to add in columns, you have to place the numerals in the appropriate place. Add the units first, and then add the tens. Write 45 + 12 in columns and add.",
+      "keywords": [
+        "add",
+        "columns",
+        "place",
+        "numbers",
+        "65"
+      ]
+    },
+    {
+      "q": "Akil adds 15 red apples.",
+      "a": "Akil adds 15 red apples. How many apples does he have in all? Read this word problem carefully. There are 12 pencils in a box and Sarah adds 13 more pencils in it. How many pencils are there in the box? He gets 61 more beads from his father. How many beads does he have in all?",
+      "keywords": [
+        "many",
+        "he",
+        "pencils",
+        "adds",
+        "apples"
+      ]
+    },
+    {
+      "q": "68 10 ten strips A hundred square Tip tens units + tens units + 3.",
+      "a": "68 10 ten strips A hundred square Tip tens units + tens units + 3. Jean has 53 football stickers. He buys 40 more stickers. How many stickers does he have in all? She gets 34 more sweets from her sister. How many sweets does she have in all? When you add 10 ten strips altogether you get a hundred. This is a hundred square.",
+      "keywords": [
+        "hundred",
+        "stickers",
+        "10",
+        "ten",
+        "strips"
+      ]
+    },
+    {
+      "q": "Adding two 3-digit numbers When you have to add two 3-digit numbers, you can make use of h",
+      "a": "Adding two 3-digit numbers When you have to add two 3-digit numbers, you can make use of hundred squares, ten strips and unit squares to help you. Add 244 + 512 Split the numbers as follows: 244 is 2 hundreds 4 tens and 4 units That is, 512 is 5 hundreds 1 ten and 2 units That is, 244 + 512 = 756 You get: 7 hundreds, 5 tens and 6 units. When you add these strips altogether",
+      "keywords": [
+        "numbers",
+        "add",
+        "244",
+        "512",
+        "hundreds"
+      ]
+    },
+    {
+      "q": "Adding two 3-digit numbers When you have to add in columns, don\u2019t forget to put the numera",
+      "a": "Adding two 3-digit numbers When you have to add in columns, don\u2019t forget to put the numerals in the appropriate place. For Write 125 + 322 in columns Split the numbers as follows:",
+      "keywords": [
+        "numbers",
+        "columns",
+        "adding",
+        "two",
+        "digit"
+      ]
+    },
+    {
+      "q": "Recall place value When you have to write and add in columns, pay attention to the \"place ",
+      "a": "Recall place value When you have to write and add in columns, pay attention to the \"place value\" of each digit in the numerals. Always add the units first.",
+      "keywords": [
+        "place",
+        "value",
+        "add",
+        "recall",
+        "write"
+      ]
+    },
+    {
+      "q": "Numbers 75 Kader is doing some mathematics problems at home.",
+      "a": "Numbers 75 Kader is doing some mathematics problems at home. He starts to work out an addition problem. 1 Addition using Number strips . 1 ten strip represents 10 unit squares.",
+      "keywords": [
+        "addition",
+        "numbers",
+        "75",
+        "kader",
+        "doing"
+      ]
+    },
+    {
+      "q": "Sofia decides to make a bouquet.",
+      "a": "Sofia decides to make a bouquet. She has 38 roses and 9 dahlias. How many flowers are there in all? Number of flowers = _______",
+      "keywords": [
+        "flowers",
+        "sofia",
+        "decides",
+        "make",
+        "bouquet"
+      ]
+    },
+    {
+      "q": "Addition with carrying Let's try this out: You get 16 units that is 1 ten and 6 units.",
+      "a": "Addition with carrying Let's try this out: You get 16 units that is 1 ten and 6 units. You get 12 tens, that is 1 hundred and 2 tens.",
+      "keywords": [
+        "get",
+        "units",
+        "tens",
+        "addition",
+        "carrying"
+      ]
+    },
+    {
+      "q": "Write in columns and work out.",
+      "a": "Write in columns and work out. Kiran has a bag of coins. There are 839 gold coins and 48 silver coins in it. How many coins are there in the bag? Number of coins in all= _______",
+      "keywords": [
+        "coins",
+        "bag",
+        "write",
+        "columns",
+        "work"
+      ]
+    },
+    {
+      "q": "88 Mass The tennis ball is lighter than the basket ball.",
+      "a": "88 Mass The tennis ball is lighter than the basket ball. The basket ball is heavier than the tennis ball. Try this Write heavier or lighter in the space provided. The jug is __________ than the eggplant. The eggplant is __________ than the jug.",
+      "keywords": [
+        "ball",
+        "than",
+        "tennis",
+        "lighter",
+        "basket"
+      ]
+    },
+    {
+      "q": "90 Jim and his mother are at the market.",
+      "a": "90 Jim and his mother are at the market. Jim is curious about the scale that the vegetable seller is using. Can you give me 1 kilogram of carrots please? 1 2 3 4Kilogram is a unit for measuring mass. We can also write it as \u201ckg\u201d Mum, what is kilogram? Observe carefully and discuss the picture. What is the unit that Jim is talking about? Have you ever come across this unit in real life?",
+      "keywords": [
+        "jim",
+        "unit",
+        "kilogram",
+        "90",
+        "his"
+      ]
+    },
+    {
+      "q": "Measure 91 Did you know?",
+      "a": "Measure 91 Did you know? The kilogram is a metric measure of mass. It can also be written as kg. Record your findings in your sheet. 1 2 3 Listen carefully to the instructions of your teacher. Can you tell whether the mass of each item is equal to one kilogram or more/less than one kilogram? Record your findings in the record sheet on the next page.",
+      "keywords": [
+        "kilogram",
+        "record",
+        "measure",
+        "mass",
+        "findings"
+      ]
+    },
+    {
+      "q": "92 I discover the kilogram Less than 1 kg 1 kg More than 1 kg 1.",
+      "a": "92 I discover the kilogram Less than 1 kg 1 kg More than 1 kg 1. Make a list of products that have 1 kg written on the package. _________________ _________________ _________________ _________________ Write each item's name in the correct column. With the help of your parents and your teacher, complete this list.",
+      "keywords": [
+        "kg",
+        "than",
+        "list",
+        "92",
+        "discover"
+      ]
+    },
+    {
+      "q": "A chef in a restaurant cooks 61 kg of pasta in a week.",
+      "a": "A chef in a restaurant cooks 61 kg of pasta in a week. Then, he cooks 24 kg of pasta the next week. What is the total mass of pasta cooked during the two weeks?",
+      "keywords": [
+        "pasta",
+        "cooks",
+        "kg",
+        "week",
+        "chef"
+      ]
+    },
+    {
+      "q": "The Gram is a metric measure of mass.",
+      "a": "The Gram is a metric measure of mass. It can also be written as \"g\". One Gram is less than 1 kilogram. Record your findings in your sheet. 1 2 3 Listen carefully to the instructions of your teacher. Estimate whether the items are equal to 1000g or more/less than 1000g. Write your findings in the record sheet on the next page.",
+      "keywords": [
+        "gram",
+        "less",
+        "than",
+        "record",
+        "findings"
+      ]
+    },
+    {
+      "q": "Make a list of products that have their mass in grams.",
+      "a": "Make a list of products that have their mass in grams. _________________ _________________ _________________ _________________ Write the item's name in the correct column. With the help of your parents and your teacher, complete this list.",
+      "keywords": [
+        "list",
+        "make",
+        "products",
+        "mass",
+        "grams"
+      ]
+    },
+    {
+      "q": "I weigh 15 kg more than Shanna.",
+      "a": "I weigh 15 kg more than Shanna. Eric gets 850 g of chocolate. He decides to buy 350 g of chocolate the next day. What is the mass of chocolate that Eric has in all? I have the same mass as Shanna. What is the mass of Emma? _______ kg What is the mass of Roy? _______ kg What is the total mass of Shanna and Roy?",
+      "keywords": [
+        "mass",
+        "kg",
+        "shanna",
+        "chocolate",
+        "eric"
+      ]
+    },
+    {
+      "q": "In April, Razia buys 350 kg of rice for her restaurant.",
+      "a": "In April, Razia buys 350 kg of rice for her restaurant. The next month, she buys 250 kg of rice. Then in June, she buys 300 kg of rice. What is total mass of rice for April and May? ____________ What is total mass of rice for April, May and June? ____________ What is the total mass of the carrots and the eggplants? _______ g What is the total mass of the carrots and the cabbage? Selvina is measuring the mass of some vegetables.",
+      "keywords": [
+        "rice",
+        "mass",
+        "total",
+        "april",
+        "buys"
+      ]
+    },
+    {
+      "q": "102 http://www.ictgames.com/mostlyPostie.html Continuous Assessment Get some more practice",
+      "a": "102 http://www.ictgames.com/mostlyPostie.html Continuous Assessment Get some more practice! Complete with the correct word. We measure the mass of heavy objects in _________ . ( kg , g ) We measure the mass of light objects in _________ . Write down the mass of each object.",
+      "keywords": [
+        "mass",
+        "measure",
+        "objects",
+        "102",
+        "http"
+      ]
+    },
+    {
+      "q": "Joe buys 525 g of onions and 300 g of garlic.",
+      "a": "Joe buys 525 g of onions and 300 g of garlic. What is the total mass of spices that he buys? Alan weighs 59 kg and Alice weighs 15 kg more. What is the mass of Alice? Ali buys 675 kg of lentils. Then he buys 225 kg of lentils. What is the total mass of lentils that he buys in all?",
+      "keywords": [
+        "buys",
+        "kg",
+        "mass",
+        "he",
+        "lentils"
+      ]
+    },
+    {
+      "q": "Numbers Subtraction Do you remember?",
+      "a": "Numbers Subtraction Do you remember? When you have to subtract any number of items, you may cross the number of items you need to remove. Sandy takes one of them. Five take away one makes four I take one balloon. How many balloons have you left? There were five balloons and Sandy takes one of them. Therefore, Aurelie has four left.",
+      "keywords": [
+        "one",
+        "number",
+        "items",
+        "sandy",
+        "takes"
+      ]
+    },
+    {
+      "q": "Numbers 107 3 tens and 8 units take away 1 ten and 5 units = 2 tens and 3 units 38 - 15 = ",
+      "a": "Numbers 107 3 tens and 8 units take away 1 ten and 5 units = 2 tens and 3 units 38 - 15 = 23 When we write the numbers, put the numerals in the appropriate columns. In Grade 2, you used number strips to carry out subtraction. tens units 3 8 1 5 - 32 You can use sticks to help you.",
+      "keywords": [
+        "units",
+        "tens",
+        "numbers",
+        "107",
+        "take"
+      ]
+    },
+    {
+      "q": "He gives 32 beads to Jason.",
+      "a": "He gives 32 beads to Jason. Find the number of beads Jeff has left. Alan weighs 59 kg and Alice weighs 15 kg less. What is the mass of Alice?",
+      "keywords": [
+        "beads",
+        "weighs",
+        "kg",
+        "alice",
+        "he"
+      ]
+    },
+    {
+      "q": "110 Kelly wants to learn a new way to carry out subtraction.",
+      "a": "110 Kelly wants to learn a new way to carry out subtraction. She comes across subtraction with borrowing. T U 5 6 2 7- Do you know how to help Kelly out? Don\u2019t forget that 1 ten strip represents 10 unit squares.",
+      "keywords": [
+        "kelly",
+        "out",
+        "subtraction",
+        "110",
+        "wants"
+      ]
+    },
+    {
+      "q": "Subtraction with borrowing When you have to subtract two numbers, sometimes you may need t",
+      "a": "Subtraction with borrowing When you have to subtract two numbers, sometimes you may need to \u201cborrow\u201d from the column on the left. We borrow 1 ten from 5 tens and we get 16 units. Now, we can take away 7 units from 16 units. Then, we take away 2 tens from 4 tens. 2 tens and 9 units are left.",
+      "keywords": [
+        "tens",
+        "units",
+        "borrow",
+        "left",
+        "16"
+      ]
+    },
+    {
+      "q": "Subtracting two 3-digit numbers How would you carry out the following?",
+      "a": "Subtracting two 3-digit numbers How would you carry out the following? 365 - 153 = Use your hundred squares, ten strips and unit squares. Take away 1 hundred 5 tens and 3 units. We have 2 hundreds, 1 ten and 2 units left.",
+      "keywords": [
+        "hundred",
+        "squares",
+        "ten",
+        "units",
+        "subtracting"
+      ]
+    },
+    {
+      "q": "Subtracting two 3-digit numbers in columns When you have to subtract in columns, don\u2019t for",
+      "a": "Subtracting two 3-digit numbers in columns When you have to subtract in columns, don\u2019t forget to put the numerals in the right place. For Write 685 - 424 in columns Break down the numbers: Then, subtract the tens followed by subtraction of hundreds. 424 is 4 hundreds 2 tens and 4 units",
+      "keywords": [
+        "columns",
+        "numbers",
+        "subtract",
+        "424",
+        "tens"
+      ]
+    },
+    {
+      "q": "Recall place value When you have to write and subtract in columns, pay attention to the \"p",
+      "a": "Recall place value When you have to write and subtract in columns, pay attention to the \"place value\" of each digit in the numerals. Always start with the units. Write in columns and subtract.",
+      "keywords": [
+        "place",
+        "value",
+        "write",
+        "subtract",
+        "columns"
+      ]
+    },
+    {
+      "q": "Ali buys 675 kg of lentils.",
+      "a": "Ali buys 675 kg of lentils. He sells 225 kg of lentils. What is the mass of lentils left? Mass of lentils left = _______ 8. How many eggs are left?",
+      "keywords": [
+        "lentils",
+        "left",
+        "kg",
+        "mass",
+        "ali"
+      ]
+    },
+    {
+      "q": "(1) Subtracting two 3-digit numbers with borrowing When you have to subtract two 3-digit n",
+      "a": "(1) Subtracting two 3-digit numbers with borrowing When you have to subtract two 3-digit numbers, sometimes you need to \u201cborrow\u201d from other column. We cannot subtract 9 from 5 to get a whole number. We borrow 1 ten from 7 tens and we are left with 6 tens. Then we get 15 units.",
+      "keywords": [
+        "two",
+        "digit",
+        "numbers",
+        "subtract",
+        "borrow"
+      ]
+    },
+    {
+      "q": "We cannot subtract 9 units from 7 units to get a whole number.",
+      "a": "We cannot subtract 9 units from 7 units to get a whole number. We borrow 1 ten from 6 tens, add it to 7 units, we get 17 units. 1 hundred is 10 tens added to 5 tens gives 15 tens.",
+      "keywords": [
+        "units",
+        "tens",
+        "get",
+        "cannot",
+        "subtract"
+      ]
+    },
+    {
+      "q": "We borrow 1 hundred from the hundred's column.",
+      "a": "We borrow 1 hundred from the hundred's column. We can now borrow from the ten's column. We borrow 1 ten from 10 tens and subtract.",
+      "keywords": [
+        "borrow",
+        "hundred",
+        "column",
+        "ten",
+        "now"
+      ]
+    },
+    {
+      "q": "Subtracting with borrowing involving zero Let\u2019s work out 15.",
+      "a": "Subtracting with borrowing involving zero Let\u2019s work out 15. In a zoo, there are 385 animals. 378 animals are transferred to another zoo. How many animals are left in the zoo?",
+      "keywords": [
+        "zoo",
+        "animals",
+        "subtracting",
+        "borrowing",
+        "involving"
+      ]
+    },
+    {
+      "q": "Write in columns and work out.",
+      "a": "Write in columns and work out. Eric gets 850 grams of chocolate and he decides to give 350 grams to Kalvida. How many grams of chocolate has Eric left?",
+      "keywords": [
+        "grams",
+        "eric",
+        "chocolate",
+        "write",
+        "columns"
+      ]
+    }
+  ]
+}

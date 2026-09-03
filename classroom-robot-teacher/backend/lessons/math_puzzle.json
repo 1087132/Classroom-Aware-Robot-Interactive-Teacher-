@@ -1,0 +1,178 @@
+{
+  "id": "math_puzzle",
+  "title": "Math Puzzle Adventure",
+  "subject": "Mathematics",
+  "grade": "Grade 5-6",
+  "topic_label": "fractions and number puzzles",
+  "duration_min": 20,
+  "greeting": "Hello class! I am CAT, your robot teaching assistant. Today we are going on a Math Puzzle Adventure with fractions and number tricks. Grab your devices, sit up straight, and let's have fun!",
+  "closing": "That was an amazing Math Puzzle Adventure! You cracked fractions, patterns, and speedy puzzles. Give yourselves a round of applause. See you next lesson!",
+  "flow": [
+    {
+      "type": "content",
+      "title": "What is a fraction?",
+      "body": "A fraction shows a part of a whole. The TOP number (numerator) tells how many parts we have. The BOTTOM number (denominator) tells how many equal parts the whole is split into. Example: 3/4 of a pizza means the pizza was cut into 4 equal slices and we have 3 of them.",
+      "speak": "A fraction shows a part of a whole. The top number is the numerator, how many parts we have. The bottom number is the denominator, how many equal parts in total. Like 3 out of 4 pizza slices!",
+      "expression": "talking"
+    },
+    { "type": "question", "question_id": "m1" },
+    {
+      "type": "content",
+      "title": "Equivalent fractions",
+      "body": "Two fractions are EQUIVALENT when they show the same amount. Multiply or divide the top and bottom by the same number: 1/2 = 2/4 = 4/8. It's the same slice of pizza, just cut differently!",
+      "speak": "Equivalent fractions show the same amount. One half equals two quarters equals four eighths. Same pizza, different cuts!",
+      "expression": "talking"
+    },
+    { "type": "question", "question_id": "m2" },
+    { "type": "question", "question_id": "m3" },
+    {
+      "type": "content",
+      "title": "Number patterns",
+      "body": "A pattern follows a rule. Look at 2, 4, 8, 16... each number DOUBLES! Finding the rule is like being a math detective. Always check: add? subtract? multiply?",
+      "speak": "Number patterns follow a secret rule. Two, four, eight, sixteen. Each number doubles! Be a math detective and find the rule.",
+      "expression": "curious"
+    },
+    { "type": "question", "question_id": "m4" },
+    { "type": "question", "question_id": "m5" }
+  ],
+  "questions": [
+    {
+      "id": "m1",
+      "text": "A chocolate bar has 8 equal pieces. You eat 3. What fraction did you eat?",
+      "options": ["3/8", "8/3", "3/5", "5/8"],
+      "answer": 0,
+      "time_limit": 30,
+      "difficulty": "easy",
+      "explanation": "You ate 3 pieces out of 8 equal pieces, so the fraction is 3/8.",
+      "keywords": ["fraction", "chocolate", "pieces"]
+    },
+    {
+      "id": "m2",
+      "text": "Which fraction is EQUIVALENT to 1/2?",
+      "options": ["2/3", "3/6", "1/4", "2/5"],
+      "answer": 1,
+      "time_limit": 30,
+      "difficulty": "easy",
+      "explanation": "3/6 simplifies to 1/2 because 3 is half of 6.",
+      "keywords": ["equivalent", "fraction", "half"]
+    },
+    {
+      "id": "m3",
+      "text": "Which is BIGGER: 2/3 or 3/5?",
+      "options": ["2/3", "3/5", "They are equal", "Cannot compare"],
+      "answer": 0,
+      "time_limit": 35,
+      "difficulty": "medium",
+      "explanation": "2/3 = 10/15 and 3/5 = 9/15, so 2/3 is bigger.",
+      "keywords": ["compare", "bigger", "fraction"]
+    },
+    {
+      "id": "m4",
+      "text": "What comes next in the pattern: 2, 4, 8, 16, ...?",
+      "options": ["18", "24", "32", "20"],
+      "answer": 2,
+      "time_limit": 25,
+      "difficulty": "easy",
+      "explanation": "Each number doubles, so 16 x 2 = 32.",
+      "keywords": ["pattern", "doubles", "sequence"]
+    },
+    {
+      "id": "m5",
+      "text": "Puzzle: I am a number. Double me, add 4, and you get 20. Who am I?",
+      "options": ["6", "8", "10", "12"],
+      "answer": 1,
+      "time_limit": 40,
+      "difficulty": "hard",
+      "explanation": "Work backwards: 20 - 4 = 16, then 16 / 2 = 8.",
+      "keywords": ["puzzle", "riddle", "number"]
+    },
+    {
+      "id": "g1",
+      "text": "Quick! What is 1/2 of 10?",
+      "options": ["2", "5", "10", "20"],
+      "answer": 1,
+      "time_limit": 12,
+      "difficulty": "easy",
+      "explanation": "Half of 10 is 5.",
+      "keywords": ["half", "quick"]
+    },
+    {
+      "id": "g2",
+      "text": "Quick! 1/4 + 1/4 = ?",
+      "options": ["1/8", "2/8", "1/2", "1/16"],
+      "answer": 2,
+      "time_limit": 12,
+      "difficulty": "easy",
+      "explanation": "1/4 + 1/4 = 2/4, which simplifies to 1/2.",
+      "keywords": ["add", "quarters"]
+    },
+    {
+      "id": "g3",
+      "text": "Quick! Next in pattern: 1, 3, 5, 7, ...?",
+      "options": ["8", "9", "10", "11"],
+      "answer": 1,
+      "time_limit": 12,
+      "difficulty": "easy",
+      "explanation": "These are odd numbers, so 9 comes next.",
+      "keywords": ["odd", "pattern"]
+    }
+  ],
+  "minigame": {
+    "title": "Quick-Fire Math Blitz",
+    "intro": "Bonus round! Quick-Fire Math Blitz! You have only 12 seconds per question and points are DOUBLED. Fingers ready... go!",
+    "question_ids": ["g1", "g2", "g3"],
+    "time_limit": 12
+  },
+  "knowledge_base": [
+    {
+      "q": "What is a fraction?",
+      "a": "A fraction shows a part of a whole. The top number (numerator) counts the parts you have, and the bottom number (denominator) shows how many equal parts the whole is divided into.",
+      "keywords": ["fraction", "part", "whole"]
+    },
+    {
+      "q": "What is a numerator?",
+      "a": "The numerator is the TOP number of a fraction. It tells how many parts we have. In 3/8, the numerator is 3.",
+      "keywords": ["numerator", "top"]
+    },
+    {
+      "q": "What is a denominator?",
+      "a": "The denominator is the BOTTOM number of a fraction. It tells how many equal parts the whole is split into. In 3/8, the denominator is 8.",
+      "keywords": ["denominator", "bottom"]
+    },
+    {
+      "q": "What are equivalent fractions?",
+      "a": "Equivalent fractions look different but show the same amount, like 1/2, 2/4 and 4/8. Multiply or divide the top and bottom by the same number to find them.",
+      "keywords": ["equivalent", "equal", "same"]
+    },
+    {
+      "q": "How do I compare two fractions?",
+      "a": "Give both fractions the same denominator, then compare the top numbers. For example 2/3 = 10/15 and 3/5 = 9/15, so 2/3 is bigger.",
+      "keywords": ["compare", "bigger", "smaller"]
+    },
+    {
+      "q": "How do I add fractions with the same denominator?",
+      "a": "If the denominators are the same, just add the numerators and keep the denominator: 1/4 + 2/4 = 3/4.",
+      "keywords": ["add", "plus", "sum"]
+    },
+    {
+      "q": "How do I simplify a fraction?",
+      "a": "Divide the top and bottom by the same number until you cannot anymore. For example 4/8 divided by 4 becomes 1/2.",
+      "keywords": ["simplify", "reduce", "lowest"]
+    },
+    {
+      "q": "What is a number pattern?",
+      "a": "A number pattern is a list of numbers that follows a rule, like doubling (2, 4, 8, 16) or adding 2 (1, 3, 5, 7). Find the rule to predict the next number.",
+      "keywords": ["pattern", "sequence", "rule", "next"]
+    },
+    {
+      "q": "What is half of a number?",
+      "a": "Half means dividing by 2, or multiplying by 1/2. Half of 10 is 5.",
+      "keywords": ["half", "divide"]
+    },
+    {
+      "q": "How do I solve a work-backwards puzzle?",
+      "a": "Undo each step in reverse order. If double me plus 4 gives 20: subtract 4 to get 16, then halve it to get 8.",
+      "keywords": ["puzzle", "backwards", "solve", "riddle"]
+    }
+  ]
+}

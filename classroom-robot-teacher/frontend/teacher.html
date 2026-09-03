@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CAT - Teacher Dashboard</title>
+<link rel="stylesheet" href="/static/style.css?v=22" />
+<style>
+  .wrap { max-width: 1500px; margin: 0 auto; padding: 16px; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  header .logo { font-size: 30px; }
+  header h1 { font-size: 20px; }
+  .views { margin-left: auto; display: flex; gap: 8px; }
+  .grid { display: grid; grid-template-columns: 280px 1fr 300px; gap: 14px; align-items: start; }
+  .col { display: flex; flex-direction: column; gap: 14px; }
+  @media (max-width: 1200px) { .grid { grid-template-columns: 1fr 1fr; } .col3 { grid-column: 1 / -1; } }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+
+  .controls .btn { flex: 1; min-width: 90px; }
+  .btn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  #btnStart, #btnNext { width: 100%; font-size: 15px; padding: 12px; margin-bottom: 8px; }
+  details.tools { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; }
+  details.tools summary { cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--muted);
+    list-style: none; user-select: none; }
+  details.tools summary::-webkit-details-marker { display: none; }
+  details.tools summary::before { content: "\25B8  "; }
+  details.tools[open] summary::before { content: "\25BE  "; }
+  .tool-row { display: flex; gap: 8px; align-items: center; margin-top: 9px; }
+  .tool-row .btn { min-width: 132px; }
+  .tool-row .cap { font-size: 11px; color: var(--muted); flex: 1; }
+  /* rich hover popover for buttons */
+  #popover {
+    position: fixed; z-index: 1200; max-width: 250px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px 12px; box-shadow: 0 14px 34px rgba(2, 6, 23, 0.28);
+    font-size: 12px; pointer-events: none; opacity: 0; transform: translateY(4px);
+    transition: opacity .12s ease, transform .12s ease;
+  }
+  #popover.show { opacity: 1; transform: translateY(0); }
+  #popover b { display: block; font-size: 12.5px; margin-bottom: 3px; }
+  #popover span { color: var(--muted); line-height: 1.5; }
+
+  /* 80% screen takeovers (teaching mode + scheduling + robot control) */
+  #opsOverlay, #schedOverlay, #robotOverlay, #setupOverlay {
+    position: fixed; inset: 0; z-index: 940; display: none;
+    align-items: center; justify-content: center;
+    background: rgba(8, 12, 26, 0.45);
+    -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+  }
+  #opsOverlay.show, #schedOverlay.show, #robotOverlay.show, #setupOverlay.show { display: flex; }
+  #lessonOps, #schedPanel, #robotPanel, #setupPanel {
+    width: 80vw; height: 80vh; max-width: 1250px;
+    background: var(--card); border: 1px solid var(--cyan); border-radius: 20px;
+    padding: 18px 20px; box-shadow: 0 26px 70px rgba(2, 6, 23, 0.45);
+    display: flex; flex-direction: column; gap: 14px;
+    animation: pageFade 0.25s ease;
+  }
+  #schedPanel { border-color: var(--purple); }
+  #robotPanel { border-color: var(--green); }
+  #setupPanel { border-color: var(--green); width: min(560px, 80vw); height: auto; max-height: 80vh; overflow: auto; }
+  #opsBody, #schedBody, #robotBody { flex: 1; display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; min-height: 0; }
+  #schedBody { grid-template-columns: 1.1fr 1fr; }
+  #robotBody { grid-template-columns: 1fr 1.2fr; }
+  @media (max-width: 900px) { #opsBody, #schedBody, #robotBody { grid-template-columns: 1fr; overflow: auto; } }
+  #schedForm, #schedListWrap, #robotStatusBox, #robotActions {
+    border: 1px solid var(--line); border-radius: 16px; padding: 18px;
+    overflow: auto; display: flex; flex-direction: column; gap: 10px;
+  }
+  #schedForm { background: rgba(167, 139, 250, 0.05); }
+
+  /* logs takeover (students / speech / ask / session) */
+  #logsOverlay {
+    position: fixed; inset: 0; z-index: 940; display: none;
+    align-items: center; justify-content: center;
+    background: rgba(8, 12, 26, 0.45);
+    -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+  }
+  #logsOverlay.show { display: flex; }
+  #logsPanel {
+    width: 80vw; height: 80vh; max-width: 1250px;
+    background: var(--card); border: 1px solid var(--blue); border-radius: 20px;
+    padding: 18px 20px; box-shadow: 0 26px 70px rgba(2, 6, 23, 0.45);
+    display: flex; flex-direction: column; gap: 14px;
+    animation: pageFade 0.25s ease;
+  }
+  #logsBody { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  #logsBody [data-pane] { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  #logsPanel .scroll { max-height: none; flex: 1; border: 1px solid var(--line);
+    border-radius: 14px; padding: 12px 14px; }
+  #logsPanel table td, #logsPanel table th { font-size: 13.5px; }
+  #logsPanel .askline, #logsPanel .logline { font-size: 13.5px; }
+
+  /* right column: plain log buttons */
+  .logbtn {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 15px 16px; font-size: 14.5px; text-align: left;
+  }
+  .logbtn .badge { margin-left: auto; }
+  #robotStatusBox { background: rgba(52, 211, 153, 0.05); align-items: center; justify-content: center; text-align: center; }
+  #exprNow { font-size: 84px; line-height: 1; }
+  #robotActions .exprbtns .btn { font-size: 14px; padding: 12px 8px; }
+  .phrase-cap { font-size: 10.5px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.07em; font-weight: 700; margin-top: 8px; }
+  #phraseLib .chips { margin-top: 4px; }
+  #phraseLib .chip span[data-del] { opacity: .55; margin-left: 4px; }
+  #phraseLib .chip span[data-del]:hover { opacity: 1; color: var(--red); }
+  #opsStage {
+    border: 1px solid var(--line); border-radius: 16px; padding: 20px;
+    overflow: auto; display: flex; flex-direction: column; gap: 14px;
+    background: rgba(34, 211, 238, 0.04);
+  }
+  #opsStage .stagebox { font-size: 17px; line-height: 1.5; border: none; background: none; padding: 0; }
+  #opsStage .stagebox b { font-size: 22px; margin-bottom: 8px; }
+  #opsSide { display: flex; flex-direction: column; gap: 10px; overflow: auto; }
+  #opsSide #btnNext { font-size: 18px; padding: 16px; }
+  #opsPill {
+    display: none; position: fixed; right: 16px; bottom: 72px; z-index: 950;
+    box-shadow: 0 10px 26px rgba(2, 6, 23, 0.3);
+  }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .chip { padding: 8px 13px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card2); font-size: 12.5px; font-weight: 700; cursor: pointer;
+    color: var(--muted); transition: all .15s; }
+  .chip:hover { color: var(--text); }
+  .chip.sel { background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #fff; border-color: transparent; }
+  .bignum { font-size: 46px; font-weight: 800; line-height: 1; }
+  .gauge-row { display: flex; gap: 18px; align-items: center; }
+  canvas.chart { width: 100%; height: 130px; }
+
+  .scroll { max-height: 260px; overflow-y: auto; }
+  .logline { font-size: 12px; padding: 5px 0; border-bottom: 1px solid rgba(148,163,184,.07); }
+  .logline .t { color: var(--muted); margin-right: 6px; font-size: 11px; }
+
+  .askline { font-size: 12.5px; padding: 7px 0; border-bottom: 1px solid rgba(148,163,184,.07); line-height: 1.5; }
+
+  .stagebox { background: rgba(34,211,238,.06); border: 1px solid rgba(34,211,238,.25);
+    border-radius: 12px; padding: 12px; font-size: 14px; }
+  .stagebox b { display: block; margin-bottom: 4px; }
+
+  .exprbtns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo">&#129302;</span>
+    <div>
+      <h1>CAT Teacher Dashboard</h1>
+      <span class="muted" style="font-size:12px">Classroom-Aware Interactive Robot Teacher</span>
+    </div>
+    <span class="badge badge-cyan" id="statusBadge">idle</span>
+    <span class="badge badge-gray" id="connBadge">0 students</span>
+  </header>
+
+  <div class="grid">
+    <!-- ================= column 1: controls ================= -->
+    <div class="col col1">
+      <button class="btn logbtn" id="lessonSetupBtn"
+              data-pop="Lesson|Pick today's lesson and start it - plus upload lessons, textbook PDFs and AI questions.">
+        &#9654; Lesson <span class="badge badge-cyan" id="lessonBadge">idle</span></button>
+      <button class="btn logbtn" id="schedOpenBtn"
+              data-pop="Schedule a lesson|Pick the lesson and when it starts - the robot begins it automatically.">
+        &#128337; Schedule <span class="badge badge-purple" id="schedBadge">0 pending</span></button>
+      <button class="btn logbtn" id="robotOpenBtn"
+              data-pop="Robot control|Set expressions, make CAT speak, and manage auto-face, speaker and camera.">
+        <span id="robotBtnEmoji">&#128528;</span> Robot control</button>
+
+      <!-- lesson setup takeover -->
+      <div id="setupOverlay">
+        <div id="setupPanel">
+          <div class="row" style="justify-content:space-between">
+            <b style="font-size:16px">&#9654; Lesson</b>
+            <button class="btn btn-sm" id="setupCloseBtn">&#10005; close</button>
+          </div>
+          <select id="lessonSel" style="margin-bottom:10px" title="Choose today's lesson"></select>
+          <button class="btn btn-green" id="btnStart"
+                data-pop="Start lesson|The robot greets the class and the lesson controls pop up. Students can then join and answer.">
+          &#9654; Start lesson</button>
+          <details class="tools">
+          <summary>&#10133; Add lessons &amp; AI tools</summary>
+          <div class="tool-row">
+            <button class="btn btn-sm" id="uploadBtn"
+                    data-pop="Upload lesson|Add a ready-made lesson .json from your computer. It is validated and appears in the dropdown.">&#11014; Upload .json</button>
+            <span class="cap">add a lesson file (<a href="/api/lessons/template" download>get template</a>)</span>
+          </div>
+          <div class="tool-row">
+            <button class="btn btn-sm btn-yellow" id="pdfBtn"
+                    data-pop="Textbook PDF to lesson|Pick any textbook PDF - the offline AI extracts it and drafts a full lesson with MCQs. Takes a minute or two.">&#128218; Textbook PDF</button>
+            <span class="cap">AI builds a whole lesson from a book - watch the progress toasts</span>
+          </div>
+          <div class="tool-row">
+            <button class="btn btn-sm btn-purple" id="genBtn"
+                    data-pop="AI question|The local AI drafts one new question from the current lesson's facts. You preview and approve before students see it.">&#10024; AI question</button>
+            <span class="cap">draft one extra MCQ - you approve it before it goes live</span>
+          </div>
+          <div id="genPreview" style="display:none;margin-top:8px;border:1px solid var(--purple);
+               border-radius:12px;padding:10px;font-size:13px"></div>
+          <input type="file" id="lessonFile" accept=".json,application/json" style="display:none" />
+          <input type="file" id="pdfFile" accept=".pdf,application/pdf" style="display:none" />
+        </details>
+        </div>
+      </div>
+
+      <div id="opsOverlay">
+          <div id="lessonOps">
+            <div class="row" style="justify-content:space-between">
+              <b style="font-size:16px">&#127899;&#65039; Teaching mode <span class="muted" id="opsTitle"
+                 style="font-weight:600;font-size:13px"></span></b>
+              <button class="btn btn-sm" id="opsMinBtn"
+                      data-pop="Minimize|Shrink teaching mode into a small button and see the dashboard behind.">&#8211; minimize</button>
+            </div>
+            <div id="opsBody">
+              <div id="opsStage">
+                <h3 style="margin:0">Now on stage</h3>
+                <div class="stagebox" id="stageBox"><b>Nothing yet</b><span class="muted">Press Next to begin.</span></div>
+                <div id="qLive" style="display:none">
+                  <div class="row" style="justify-content:space-between;font-size:14px;margin-bottom:6px">
+                    <span id="qAnswers" class="badge badge-cyan">0 answers</span>
+                    <span id="qTime" class="muted">-</span>
+                  </div>
+                  <div class="timerbar" id="qBar"><div style="width:100%"></div></div>
+                </div>
+              </div>
+              <div id="opsSide">
+                <button class="btn btn-primary" id="btnNext" disabled
+                        data-pop="Next step|Move the class to the next slide or question. The robot narrates it automatically.">
+                  Next step &#9197;</button>
+                <div class="btn-grid">
+                  <button class="btn btn-yellow" id="btnPause" disabled
+                          data-pop="Pause / Resume|Freeze timers and quiet the robot while you talk. Press again to continue.">&#9208; Pause</button>
+                  <button class="btn btn-purple" id="btnMini" disabled
+                          data-pop="Mini-game|Quick-fire bonus round with double points - great when energy dips.">&#9889; Game</button>
+                  <button class="btn btn-red" id="btnStop" disabled
+                          data-pop="End lesson|Robot says goodbye, scores are saved, and the session appears in Tracking history.">&#9632; End</button>
+                </div>
+                <div class="row">
+                  <span class="muted" style="font-size:12px"
+                        data-pop="Robot-led mode|The robot paces the whole lesson by itself - slides, questions and reveals. You can pause or take over anytime.">
+                    &#129302; Robot runs the lesson:</span>
+                  <button class="btn btn-sm btn-red" id="autoAdvBtn">OFF</button>
+                </div>
+                <div class="muted" style="font-size:12.5px" id="progressInfo">No lesson running</div>
+                <div class="muted" style="font-size:11.5px;margin-top:auto">
+                  Tip: minimize to check the roster, heatmap or speech log - the lesson keeps running.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <button class="btn btn-primary" id="opsPill"
+                data-pop="Teaching mode|Reopen the big lesson control screen.">&#127899;&#65039; Teaching mode</button>
+      <div id="schedOverlay">
+          <div id="schedPanel">
+            <div class="row" style="justify-content:space-between">
+              <b style="font-size:16px">&#128337; Schedule a lesson</b>
+              <button class="btn btn-sm" id="schedCloseBtn"
+                      data-pop="Close|Back to the dashboard. Scheduled lessons still start on time.">&#10005; close</button>
+            </div>
+            <div id="schedBody">
+              <div id="schedForm">
+                <div id="nowClock" style="text-align:center;font-size:14px;padding:10px;border:1px dashed var(--line);
+                     border-radius:10px;color:var(--cyan);font-weight:700"></div>
+                <div class="muted" style="font-size:12px">Which lesson?</div>
+                <select id="schedLessonSel"></select>
+                <div class="muted" style="font-size:12px">When should the robot start it?</div>
+                <div class="chips" id="whenChips" style="margin-top:0">
+                  <button class="chip sel" data-when="5">in 5 min</button>
+                  <button class="chip" data-when="15">in 15 min</button>
+                  <button class="chip" data-when="60">in 1 hour</button>
+                  <button class="chip" data-when="tomorrow9">tomorrow 9:00</button>
+                  <button class="chip" data-when="custom">pick date &amp; time...</button>
+                </div>
+                <div class="row" id="customWhen" style="display:none">
+                  <input type="date" id="schedDate" style="flex:1.2" title="Lesson date" />
+                  <input type="time" id="schedTime" style="flex:1" title="Start time" />
+                </div>
+                <div class="row">
+                  <input type="number" id="schedMini" placeholder="&#9889; mini-game @ minute (optional)" min="1" max="60"
+                         style="flex:1" title="Automatically start the mini-game this many minutes into the lesson" />
+                  <label class="row" style="font-size:12px;color:var(--muted);cursor:pointer;white-space:nowrap"
+                         title="The robot paces the whole lesson by itself">
+                    <input type="checkbox" id="schedAuto" checked style="width:auto" /> robot-led
+                  </label>
+                </div>
+                <button class="btn btn-purple" id="schedBtn" style="width:100%;font-size:15px;padding:13px"></button>
+                <div class="muted" id="schedHint" style="font-size:12px;text-align:center"></div>
+              </div>
+              <div id="schedListWrap">
+                <h3 style="margin:0">Upcoming &amp; recent</h3>
+                <div id="schedList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div id="robotOverlay">
+          <div id="robotPanel">
+            <div class="row" style="justify-content:space-between">
+              <b style="font-size:16px">&#128524; Robot control</b>
+              <button class="btn btn-sm" id="robotCloseBtn"
+                      data-pop="Close|Back to the dashboard. The robot keeps doing its thing.">&#10005; close</button>
+            </div>
+            <div id="robotBody">
+              <div id="robotStatusBox">
+                <h3 style="margin:0">Right now CAT looks</h3>
+                <div id="exprNow">&#128528;</div>
+                <div id="exprNowLabel" class="badge badge-cyan" style="font-size:14px">neutral</div>
+                <div class="row" style="justify-content:center;margin-top:10px">
+                  <span class="muted" style="font-size:12px"
+                        data-pop="Auto face|The robot's expression follows the class engagement score automatically. Manual picks pause it for 30 seconds.">
+                    Auto face (by engagement):</span>
+                  <button class="btn btn-sm btn-green" id="autoFaceBtn">ON</button>
+                </div>
+                <div class="row" style="justify-content:center">
+                  <span class="muted" style="font-size:12px"
+                        data-pop="Robot speaker|Voice plays through THIS computer's speakers (the robot). Turn OFF to use the robot-face browser voice instead.">
+                    &#128266; Speaker (this computer):</span>
+                  <button class="btn btn-sm btn-green" id="speakerBtn">ON</button>
+                </div>
+                <span class="muted" style="font-size:11px" id="autoFaceInfo">
+                  &#128578; &#8805;80 &middot; &#128528; 60-79 &middot; &#128173; 45-59 &middot; &#128533; &lt;45</span>
+              </div>
+              <div id="robotActions">
+                <h3 style="margin:0">Set an expression</h3>
+                <div class="exprbtns">
+                  <button class="btn" data-expr="happy">&#128578; happy</button>
+                  <button class="btn" data-expr="excited">&#129321; excited</button>
+                  <button class="btn" data-expr="curious">&#129300; curious</button>
+                  <button class="btn" data-expr="thinking">&#128173; thinking</button>
+                  <button class="btn" data-expr="concerned">&#128533; concerned</button>
+                  <button class="btn" data-expr="sleepy">&#128564; sleepy</button>
+                </div>
+                <h3 style="margin:6px 0 0">Make CAT speak</h3>
+                <div class="row">
+                  <input type="text" id="sayInput" placeholder="Make CAT say something..." style="flex:1" />
+                  <button class="btn btn-primary" id="sayBtn">Say</button>
+                  <button class="btn btn-sm" id="savePhraseBtn"
+                          data-pop="Save phrase|Save the typed sentence as a reusable chip under 'My phrases'.">&#128190;</button>
+                </div>
+                <div id="phraseLib">
+                  <div class="phrase-cap">&#128075; Greetings</div>
+                  <div class="chips">
+                    <button class="chip" data-say="Hello everyone, welcome to the class! It is wonderful to see you all!">Welcome to class</button>
+                    <button class="chip" data-say="Good morning, superstars! Are you ready to learn something amazing today?">Good morning</button>
+                    <button class="chip" data-say="Have you all had a great weekend? I hope you are full of energy!">Great weekend?</button>
+                    <button class="chip" data-say="Welcome back, friends! I missed you all so much!">Welcome back</button>
+                  </div>
+                  <div class="phrase-cap">&#128064; Attention</div>
+                  <div class="chips">
+                    <button class="chip" data-say="Eyes on me, superstars!">Eyes on me!</button>
+                    <button class="chip" data-say="Three, two, one... quiet please!">Quiet please</button>
+                    <button class="chip" data-say="Freeze! Listening ears on, everyone!">Listening ears</button>
+                    <button class="chip" data-say="If you can hear me, put your hands on your head!">Hands on head</button>
+                  </div>
+                  <div class="phrase-cap">&#127881; Praise</div>
+                  <div class="chips">
+                    <button class="chip" data-say="Great job, everyone! Give yourselves a high five!">Great job!</button>
+                    <button class="chip" data-say="Wow, this class is full of clever minds! I am so proud of you!">So proud</button>
+                    <button class="chip" data-say="A big round of applause for yourselves!">Applause</button>
+                  </div>
+                  <div class="phrase-cap">&#128218; Class flow</div>
+                  <div class="chips">
+                    <button class="chip" data-say="Please take out your books and pencils!">Books out</button>
+                    <button class="chip" data-say="Time for a two minute brain break! Stretch your arms high!">Brain break</button>
+                    <button class="chip" data-say="Pack up your things, the lesson is almost over!">Pack up</button>
+                    <button class="chip" data-say="That is all for today. Goodbye everyone, see you next class!">Goodbye</button>
+                  </div>
+                  <div class="phrase-cap">&#11088; My phrases</div>
+                  <div class="chips" id="myPhrases"></div>
+                </div>
+                <h3 style="margin:6px 0 0">Perception</h3>
+                <div class="row">
+                  <select id="percMode" style="flex:1;padding:8px 10px;font-size:13px"
+                          data-pop="Perception mode|Simulation generates attention data for demos. Camera uses the real webcam with gaze detection - manage it fully on the Tracking page.">
+                    <option value="simulation">Simulation mode</option>
+                    <option value="camera">Camera (OpenCV + gaze)</option>
+                  </select>
+                  <a class="btn btn-sm" href="/tracking" target="_blank">&#128247; camera view &#8599;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- ================= column 2: analytics ================= -->
+    <div class="col col2">
+      <div class="card">
+        <h3>Class engagement <span class="muted" style="text-transform:none">(updates every 5 s)</span></h3>
+        <div class="gauge-row">
+          <div>
+            <div class="bignum" id="classScore">-</div>
+            <div class="muted" style="font-size:12px">participation score</div>
+          </div>
+          <div>
+            <div class="bignum" style="font-size:30px" id="classAtt">-</div>
+            <div class="muted" style="font-size:12px">avg attention</div>
+          </div>
+          <div class="spacer"></div>
+          <div class="muted" style="font-size:12px;text-align:right" id="audioLoc">&#127908; no audio activity</div>
+        </div>
+        <canvas class="chart" id="timeline"></canvas>
+      </div>
+
+    </div>
+
+    <!-- ================= column 3: everything as buttons ================= -->
+    <div class="col col3">
+      <button class="btn logbtn" id="openStudentsBtn"
+              data-pop="Students|See every student's live A/P/Q/S scores, call on someone, or push them an easier question.">
+        &#127891; Students <span class="badge badge-cyan" id="rosterCount">0</span></button>
+      <button class="btn logbtn" id="openSpeechBtn"
+              data-pop="Speech log|Everything students said via the mic buttons - transcribed and classified as interaction, spoken answers, or chatter.">
+        &#127908; Speech log <span class="badge badge-cyan" id="speechCount">0</span></button>
+      <button class="btn logbtn" id="openAskBtn"
+              data-pop="Ask-CAT log|Every question students asked the robot, with the LLM's answers and on-topic / refused badges.">
+        &#129302; Ask-CAT log <span class="badge badge-gray" id="llmChip" title="Answer engine">...</span></button>
+      <button class="btn logbtn" id="openLogBtn"
+              data-pop="Session log|The full timeline of everything that happened: joins, questions, alerts, robot actions.">
+        &#128220; Session log</button>
+    </div>
+  </div>
+
+  <!-- logs takeover: one 80% screen, four panes -->
+  <div id="logsOverlay">
+    <div id="logsPanel">
+      <div class="row" style="justify-content:space-between">
+        <b style="font-size:16px" id="logsTitle">Logs</b>
+        <button class="btn btn-sm" id="logsCloseBtn">&#10005; close</button>
+      </div>
+      <div id="logsBody">
+        <div data-pane="students" style="display:none">
+          <div class="scroll">
+            <table id="rosterTable">
+              <thead><tr><th>Name</th><th>A</th><th>P</th><th>Q</th><th>S</th><th>Score</th><th></th></tr></thead>
+              <tbody><tr><td colspan="7" class="muted">Waiting for students to join...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div data-pane="speech" style="display:none">
+          <div class="scroll" id="speechLog">
+            <div class="muted" style="font-size:13px">Students speak via the &#127908; button on their
+            device; the robot page has a classroom mic. Utterances are transcribed and classified
+            as lesson interaction, spoken answers, or off-topic chatter.</div>
+          </div>
+        </div>
+        <div data-pane="ask" style="display:none">
+          <div class="scroll" id="askLog"><div class="muted" style="font-size:13px">No questions yet.</div></div>
+        </div>
+        <div data-pane="log" style="display:none">
+          <div class="scroll" id="eventLog"><div class="muted" style="font-size:13px">-</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="/static/common.js?v=22"></script>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const setSum = (id, html) => { const el = $(id); if (el) el.innerHTML = html; };
+  let state = { status: "idle" };
+  let curQ = null;
+  let lastTimeline = [];
+
+  // ---------------- hover popovers ----------------
+  const popEl = document.createElement("div");
+  popEl.id = "popover";
+  document.body.appendChild(popEl);
+  function bindPops(root) {
+    (root || document).querySelectorAll("[data-pop]").forEach((el) => {
+      if (el._popBound) return;
+      el._popBound = true;
+      el.addEventListener("mouseenter", () => {
+        const [t, d] = el.dataset.pop.split("|");
+        popEl.innerHTML = `<b>${esc(t)}</b><span>${esc(d || "")}</span>`;
+        const r = el.getBoundingClientRect();
+        popEl.classList.add("show");
+        const w = Math.min(250, window.innerWidth - 24);
+        popEl.style.left = Math.max(8, Math.min(r.left, window.innerWidth - w - 12)) + "px";
+        popEl.style.top = (r.bottom + 8 + 150 > window.innerHeight ? r.top - popEl.offsetHeight - 8
+                                                                   : r.bottom + 8) + "px";
+      });
+      el.addEventListener("mouseleave", () => popEl.classList.remove("show"));
+      el.addEventListener("click", () => popEl.classList.remove("show"));
+    });
+  }
+  bindPops();
+
+  // ---------------- teaching mode: 80% screen takeover ----------------
+  let opsMinimized = false;
+  let opsRunning = false;
+  function renderOpsPanel() {
+    $("opsOverlay").classList.toggle("show", opsRunning && !opsMinimized);
+    $("opsPill").style.display = opsRunning && opsMinimized ? "block" : "none";
+  }
+  $("opsMinBtn").onclick = () => { opsMinimized = true; renderOpsPanel(); };
+  $("opsPill").onclick = () => { opsMinimized = false; renderOpsPanel(); };
+  $("opsOverlay").addEventListener("click", (e) => {      // click outside = minimize
+    if (e.target === $("opsOverlay")) { opsMinimized = true; renderOpsPanel(); }
+  });
+  document.addEventListener("keydown", (e) => {           // Esc closes takeovers
+    if (e.key !== "Escape") return;
+    if ($("logsOverlay").classList.contains("show")) { $("logsOverlay").classList.remove("show"); }
+    else if ($("setupOverlay").classList.contains("show")) { renderSetupOverlay(false); }
+    else if ($("schedOverlay").classList.contains("show")) { schedOpen = false; renderSchedOverlay(); }
+    else if ($("robotOverlay").classList.contains("show")) { robotOpen = false; renderRobotOverlay(); }
+    else if (opsRunning && !opsMinimized) { opsMinimized = true; renderOpsPanel(); }
+  });
+
+  // ---------------- logs takeover (right-column buttons) ----------------
+  const LOG_PANES = {
+    students: "\u{1F393} Students - live scores & actions",
+    speech: "\u{1F3A4} Speech log (speech-to-text)",
+    ask: "\u{1F916} Ask-CAT log (constrained LLM)",
+    log: "\u{1F4DC} Session log",
+  };
+  function openLogs(pane) {
+    document.querySelectorAll("#logsBody [data-pane]").forEach(d =>
+      d.style.display = d.dataset.pane === pane ? "flex" : "none");
+    $("logsTitle").textContent = LOG_PANES[pane];
+    $("logsOverlay").classList.add("show");
+  }
+  $("openStudentsBtn").onclick = () => openLogs("students");
+  $("openSpeechBtn").onclick = () => openLogs("speech");
+  $("openAskBtn").onclick = () => openLogs("ask");
+  $("openLogBtn").onclick = () => { refreshEvents(); openLogs("log"); };
+  $("logsCloseBtn").onclick = () => $("logsOverlay").classList.remove("show");
+  $("logsOverlay").addEventListener("click", (e) => {
+    if (e.target === $("logsOverlay")) $("logsOverlay").classList.remove("show");
+  });
+
+  // ---------------- lesson controls ----------------
+  async function loadLessons() {
+    const ls = await api("/api/lessons");
+    const opts = ls.map(l =>
+      `<option value="${l.id}">${esc(l.title)} (${esc(l.subject)} - ${l.num_questions} questions)</option>`).join("");
+    $("lessonSel").innerHTML = opts;
+    $("schedLessonSel").innerHTML = opts;
+  }
+
+  $("btnStart").onclick = async () => {
+    try {
+      await api("/api/session/start", { lesson_id: $("lessonSel").value });
+      toast("Lesson started! Press Next to begin teaching.", "success");
+    } catch (e) { toast(e.message, "error"); }
+  };
+  $("btnNext").onclick = () => api("/api/session/next", {}).catch(e => toast(e.message, "error"));
+  $("btnPause").onclick = () => {
+    const paused = state.status === "paused";
+    api(`/api/session/${paused ? "resume" : "pause"}`, {}).catch(e => toast(e.message, "error"));
+  };
+  $("btnMini").onclick = () => api("/api/session/minigame", {}).catch(e => toast(e.message, "error"));
+  $("btnStop").onclick = () => api("/api/session/stop", {}).catch(e => toast(e.message, "error"));
+
+  // ---------------- robot controls ----------------
+  document.querySelectorAll("[data-expr]").forEach(b =>
+    b.onclick = () => api("/api/robot/expression", { expression: b.dataset.expr }));
+  $("sayBtn").onclick = () => {
+    const t = $("sayInput").value.trim();
+    if (t) { api("/api/robot/say", { text: t }); $("sayInput").value = ""; }
+  };
+  $("sayInput").addEventListener("keydown", e => { if (e.key === "Enter") $("sayBtn").click(); });
+  $("percMode").onchange = () => {
+    api("/api/perception/mode", { mode: $("percMode").value }).catch(e => toast(e.message, "error"));
+    renderRobotSummary();
+  };
+
+  let autoFace = true;
+  function renderAutoFace() {
+    $("autoFaceBtn").textContent = autoFace ? "ON" : "OFF";
+    $("autoFaceBtn").className = "btn btn-sm " + (autoFace ? "btn-green" : "btn-red");
+    renderRobotSummary();
+  }
+  $("autoFaceBtn").onclick = async () => {
+    const r = await api("/api/robot/autoface", { enabled: !autoFace });
+    autoFace = r.auto_face;
+    renderAutoFace();
+  };
+
+  let serverSpeaker = true;
+  function renderSpeaker() {
+    $("speakerBtn").textContent = serverSpeaker ? "ON" : "OFF";
+    $("speakerBtn").className = "btn btn-sm " + (serverSpeaker ? "btn-green" : "btn-red");
+  }
+  $("speakerBtn").onclick = async () => {
+    const r = await api("/api/robot/speaker", { enabled: !serverSpeaker });
+    serverSpeaker = r.server_speaker;
+    renderSpeaker();
+  };
+
+  // ---------------- robot control takeover ----------------
+  const EXPR_EMOJI = { happy: "\u{1F642}", excited: "\u{1F929}", curious: "\u{1F914}",
+    thinking: "\u{1F4AD}", concerned: "\u{1F615}", sleepy: "\u{1F634}", neutral: "\u{1F610}",
+    greeting: "\u{1F44B}", talking: "\u{1F5E3}\u{FE0F}", encouraging: "\u{1F4AA}",
+    proud: "\u{1F60A}", apologetic: "\u{1F605}" };
+  let robotExpr = "neutral";
+  function renderRobotSummary() {
+    const e = EXPR_EMOJI[robotExpr] || "\u{1F916}";
+    setSum("robotSummary", `${e} looking <b>${esc(robotExpr)}</b> &middot; auto-face
+      ${autoFace ? "ON" : "OFF"} &middot; ${esc($("percMode").value)}`);
+    setSum("robotBtnEmoji", e);
+    $("exprNow").textContent = e;
+    $("exprNowLabel").textContent = robotExpr;
+  }
+  function setRobotExpr(name) { robotExpr = name; renderRobotSummary(); }
+  let robotOpen = false;
+  function renderRobotOverlay() { $("robotOverlay").classList.toggle("show", robotOpen); }
+  $("robotOpenBtn").onclick = () => { robotOpen = true; renderRobotOverlay(); };
+  $("robotCloseBtn").onclick = () => { robotOpen = false; renderRobotOverlay(); };
+  $("robotOverlay").addEventListener("click", (e) => {
+    if (e.target === $("robotOverlay")) { robotOpen = false; renderRobotOverlay(); }
+  });
+  // pre-written speeches: one click -> CAT says it (delegated so saved chips work too)
+  const loadMyPhrases = () => JSON.parse(localStorage.getItem("cat_phrases") || "[]");
+  function renderMyPhrases() {
+    const arr = loadMyPhrases();
+    $("myPhrases").innerHTML = arr.length
+      ? arr.map((p, i) => `<button class="chip" data-say="${esc(p)}">${esc(p.slice(0, 26))}${p.length > 26 ? "..." : ""}
+          <span data-del="${i}" title="Remove">&#10005;</span></button>`).join("")
+      : `<span class="muted" style="font-size:11px">type something above and press &#128190; to save your own</span>`;
+  }
+  $("phraseLib").addEventListener("click", (e) => {
+    const del = e.target.closest("[data-del]");
+    if (del) {
+      const arr = loadMyPhrases();
+      arr.splice(+del.dataset.del, 1);
+      localStorage.setItem("cat_phrases", JSON.stringify(arr));
+      renderMyPhrases();
+      return;
+    }
+    const chip = e.target.closest("[data-say]");
+    if (chip) api("/api/robot/say", { text: chip.dataset.say }).catch(err => toast(err.message, "error"));
+  });
+  $("savePhraseBtn").onclick = () => {
+    const t = $("sayInput").value.trim();
+    if (!t) return toast("Type a phrase first, then press save", "warn");
+    const arr = loadMyPhrases();
+    if (!arr.includes(t)) arr.push(t);
+    localStorage.setItem("cat_phrases", JSON.stringify(arr));
+    renderMyPhrases();
+    toast("Phrase saved to 'My phrases'!", "success");
+  };
+  renderMyPhrases();
+
+  // ---------------- lesson setup takeover ----------------
+  function renderSetupOverlay(show) { $("setupOverlay").classList.toggle("show", show); }
+  $("lessonSetupBtn").onclick = () => renderSetupOverlay(true);
+  $("setupCloseBtn").onclick = () => renderSetupOverlay(false);
+  $("setupOverlay").addEventListener("click", (e) => {
+    if (e.target === $("setupOverlay")) renderSetupOverlay(false);
+  });
+
+  // ---------------- lesson upload ----------------
+  $("uploadBtn").onclick = () => $("lessonFile").click();
+  $("lessonFile").onchange = async (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    try {
+      const content = JSON.parse(await f.text());
+      const r = await api("/api/lessons/upload", { content });
+      await loadLessons();
+      $("lessonSel").value = r.id;
+    } catch (err) {
+      toast("Upload failed: " + err.message, "error");
+    }
+    e.target.value = "";
+  };
+
+  // ---------------- textbook PDF -> lesson ----------------
+  $("pdfBtn").onclick = () => $("pdfFile").click();
+  $("pdfFile").onchange = async (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const title = prompt("Lesson title:", f.name.replace(/\.pdf$/i, "").slice(0, 50));
+    if (title === null) { e.target.value = ""; return; }
+    const nq = parseInt(prompt("How many questions should the AI draft? (2-12)", "8") || "8", 10);
+    toast("Uploading textbook + building lesson... watch the progress toasts", "info");
+    try {
+      const b64 = await new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(r.result.split(",")[1]);
+        r.onerror = rej;
+        r.readAsDataURL(f);
+      });
+      await api("/api/lessons/from_pdf", { filename: f.name, content_b64: b64,
+                                           title, num_questions: nq });
+    } catch (err) { toast("Textbook upload failed: " + err.message, "error"); }
+    e.target.value = "";
+  };
+
+  // ---------------- AI question generation ----------------
+  $("genBtn").onclick = async () => {
+    $("genBtn").disabled = true;
+    $("genBtn").textContent = "Generating...";
+    try {
+      const q = await api("/api/llm/generate_question", {});
+      $("genPreview").style.display = "block";
+      $("genPreview").innerHTML = `
+        <b>&#10024; ${esc(q.text)}</b>
+        <div style="margin:6px 0">${q.options.map((o, i) => `
+          <div style="padding:3px 0">${i === q.answer ? "&#9989;" : "&#9898;"} ${esc(o)}</div>`).join("")}
+        </div>
+        <div class="muted" style="font-size:11.5px;margin-bottom:8px">${esc(q.explanation || "")}</div>
+        <div class="row">
+          <button class="btn btn-sm btn-green" onclick="pushGen()">&#128640; Push to class</button>
+          <button class="btn btn-sm" onclick="discardGen()">Discard</button>
+        </div>`;
+    } catch (e) { toast(e.message, "error"); }
+    $("genBtn").disabled = false;
+    $("genBtn").innerHTML = "&#10024; AI question";
+  };
+  window.pushGen = async () => {
+    try {
+      await api("/api/llm/push_generated", {});
+      $("genPreview").style.display = "none";
+      toast("AI question is live!", "success");
+    } catch (e) { toast(e.message, "error"); }
+  };
+  window.discardGen = () => {
+    api("/api/llm/discard_generated", {});
+    $("genPreview").style.display = "none";
+  };
+
+  // ---------------- auto-advance ----------------
+  let autoAdv = false;
+  function renderAutoAdv() {
+    $("autoAdvBtn").textContent = autoAdv ? "ON" : "OFF";
+    $("autoAdvBtn").className = "btn btn-sm " + (autoAdv ? "btn-green" : "btn-red");
+  }
+  $("autoAdvBtn").onclick = () => api("/api/session/autoadvance", { enabled: !autoAdv })
+    .catch(e => toast(e.message, "error"));
+
+  // ---------------- scheduling ----------------
+  const pad = (n) => String(n).padStart(2, "0");
+  const dateVal = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const timeVal = (d) => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const fmtFull = (d) => d.toLocaleString([], { weekday: "short", day: "2-digit", month: "short",
+                                                hour: "2-digit", minute: "2-digit" });
+  function relTime(ms) {
+    if (ms <= 0) return "now";
+    const s = Math.round(ms / 1000);
+    if (s < 60) return `in ${s}s`;
+    const m = Math.floor(s / 60);
+    if (m < 60) return `in ${m}m ${s % 60}s`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `in ${h}h ${m % 60}m`;
+    return `in ${Math.floor(h / 24)}d ${h % 24}h`;
+  }
+
+  // one-tap "when" chips -> a target Date; custom reveals the pickers
+  let whenChip = "5";
+  const chipTarget = () => {
+    if (whenChip === "custom") {
+      const d = new Date(`${$("schedDate").value}T${$("schedTime").value || "00:00"}`);
+      return isNaN(d) ? null : d;
+    }
+    if (whenChip === "tomorrow9") {
+      const d = new Date(Date.now() + 864e5);
+      d.setHours(9, 0, 0, 0);
+      return d;
+    }
+    return new Date(Date.now() + (+whenChip) * 60000);
+  };
+  function refreshSchedUI() {
+    const t = chipTarget();
+    const lesson = $("schedLessonSel").selectedOptions[0]?.textContent.split(" (")[0] || "lesson";
+    if (!t) {
+      $("schedBtn").innerHTML = "&#128337; Schedule lesson";
+      $("schedHint").textContent = "Pick a date and time above";
+      return;
+    }
+    const passed = t - Date.now() < -60000;
+    $("schedBtn").innerHTML = `&#128337; Schedule for <b>&nbsp;${fmtFull(t)}</b>`;
+    $("schedHint").innerHTML = passed
+      ? "&#9888;&#65039; That time has already passed - pick another"
+      : `"${esc(lesson)}" starts ${relTime(t - Date.now())}${$("schedAuto").checked ? " - robot-led" : ""}`;
+  }
+  document.querySelectorAll("#whenChips .chip").forEach(c => c.onclick = () => {
+    document.querySelectorAll("#whenChips .chip").forEach(x => x.classList.remove("sel"));
+    c.classList.add("sel");
+    whenChip = c.dataset.when;
+    $("customWhen").style.display = whenChip === "custom" ? "flex" : "none";
+    if (whenChip === "custom" && !$("schedDate").value) {
+      const d = new Date(Date.now() + 30 * 60000);
+      $("schedDate").value = dateVal(d);
+      $("schedTime").value = timeVal(d);
+    }
+    refreshSchedUI();
+  });
+  $("schedDate").min = dateVal(new Date());
+  $("schedDate").onchange = $("schedTime").onchange = refreshSchedUI;
+  $("schedAuto").onchange = refreshSchedUI;
+  $("schedLessonSel").addEventListener("change", refreshSchedUI);
+
+  // open / close the scheduling takeover
+  let schedOpen = false;
+  function renderSchedOverlay() { $("schedOverlay").classList.toggle("show", schedOpen); }
+  $("schedOpenBtn").onclick = () => {
+    schedOpen = true;
+    $("schedLessonSel").value = $("lessonSel").value;   // start from the selected lesson
+    refreshSchedUI();
+    renderSchedOverlay();
+  };
+  $("schedCloseBtn").onclick = () => { schedOpen = false; renderSchedOverlay(); };
+  $("schedOverlay").addEventListener("click", (e) => {
+    if (e.target === $("schedOverlay")) { schedOpen = false; renderSchedOverlay(); }
+  });
+
+  // live clock (current date + time) + ticking button/hint
+  setInterval(() => {
+    const n = new Date();
+    $("nowClock").innerHTML = `&#128336; Now: ${n.toLocaleDateString([], { weekday: "long",
+      day: "2-digit", month: "long", year: "numeric" })} &middot; ${n.toLocaleTimeString()}`;
+    if (whenChip !== "custom") refreshSchedUI();    // keep "in 5 min" chips honest
+  }, 1000);
+  refreshSchedUI();
+
+  $("schedBtn").onclick = async () => {
+    const t = chipTarget();
+    if (!t) return toast("Pick a date and time first", "warn");
+    const body = { lesson_id: $("schedLessonSel").value, date: dateVal(t), time: timeVal(t),
+                   auto_advance: $("schedAuto").checked };
+    const m = parseFloat($("schedMini").value);
+    if (m > 0) body.minigame_after_min = m;
+    try {
+      await api("/api/schedule", body);
+      toast(`Scheduled for ${fmtFull(t)}!`, "success");
+    } catch (e) { toast(e.message, "error"); }
+  };
+
+  let schedCache = [];
+  function schedSummaryText() {
+    const pending = schedCache.filter(s => s.status === "pending")
+                              .sort((a, b) => a.due_ts - b.due_ts);
+    if (!pending.length) return "No upcoming lessons scheduled.";
+    const n = pending[0];
+    return `Next: <b>${esc(n.lesson_title)}</b> - ${fmtFull(new Date(n.due_ts * 1000))} `
+         + `(${relTime(n.due_ts * 1000 - Date.now())})`
+         + (pending.length > 1 ? ` &middot; +${pending.length - 1} more` : "");
+  }
+  function renderSchedules(list) {
+    schedCache = list || [];
+    setSum("schedSummary", schedSummaryText());
+    const pend = schedCache.filter(s => s.status === "pending").length;
+    setSum("schedBadge", `${pend} pending`);
+    const badge = { pending: "yellow", started: "green", missed: "red", cancelled: "gray" };
+    if (!schedCache.length) {
+      $("schedList").innerHTML = `<div class="muted" style="font-size:13px">Nothing scheduled yet -
+        pick a time on the left and press Schedule.</div>`;
+      return;
+    }
+    $("schedList").innerHTML = schedCache.slice(-8).reverse().map(s => `
+      <div class="row" style="font-size:12px;border:1px solid var(--line);border-radius:9px;padding:6px 8px;margin-bottom:5px">
+        <span>&#128337; ${fmtFull(new Date(s.due_ts * 1000))}</span>
+        <b style="flex:1">${esc(s.lesson_title)}</b>
+        ${s.status === "pending" ? `<span class="badge badge-cyan" id="cd-${s.id}">${relTime(s.due_ts * 1000 - Date.now())}</span>` : ""}
+        ${s.auto_advance ? '<span class="badge badge-cyan" title="auto-advance">auto</span>' : ""}
+        ${s.minigame_after_min ? `<span class="badge badge-purple">&#9889;@${s.minigame_after_min}m</span>` : ""}
+        <span class="badge badge-${badge[s.status]}">${s.status}</span>
+        ${s.status === "pending" ? `<button class="btn btn-sm" onclick="cancelSched(${s.id})" title="Cancel">&#10005;</button>` : ""}
+      </div>`).join("");
+  }
+  setInterval(() => {          // live countdowns on pending schedules + card summary
+    schedCache.forEach(s => {
+      const el = document.getElementById("cd-" + s.id);
+      if (el && s.status === "pending") el.textContent = relTime(s.due_ts * 1000 - Date.now());
+    });
+    setSum("schedSummary", schedSummaryText());
+  }, 1000);
+  window.cancelSched = (id) => api(`/api/schedule/${id}/cancel`, {}).catch(e => toast(e.message, "error"));
+
+  // ---------------- state rendering ----------------
+  function applyState(st) {
+    state = st;
+    $("statusBadge").textContent = st.status;
+    const running = st.session_id && !["idle", "ended"].includes(st.status);
+    $("lessonBadge").textContent = st.status;
+    if (running) renderSetupOverlay(false);                   // hand over to teaching mode
+    $("btnStart").style.display = running ? "none" : "";      // single button when idle
+    if (running && !opsRunning) opsMinimized = false;         // fresh lesson -> open big screen
+    opsRunning = running;
+    renderOpsPanel();                                         // 80% takeover while teaching
+    $("opsTitle").textContent = st.lesson ? `- ${st.lesson.title} (${st.status})` : "";
+    $("btnNext").disabled = !running || st.status === "paused";
+    $("btnPause").disabled = !running;
+    $("btnMini").disabled = !running || st.status === "paused";
+    $("btnStop").disabled = !running;
+    $("btnPause").innerHTML = st.status === "paused" ? "&#9654; Resume" : "&#9208; Pause";
+    $("progressInfo").textContent = st.lesson
+      ? `${st.lesson.title} - step ${Math.max(0, st.flow_index + 1)}/${st.flow_total} - ${st.questions_asked} questions asked`
+      : "No lesson running";
+    if (st.status === "question" && st.question) {
+      curQ = st.question;
+      $("stageBox").innerHTML = `<b>&#10067; ${esc(st.question.text)}</b>
+        <span class="muted">${st.question.is_minigame ? "MINI-GAME - " : ""}waiting for answers...</span>`;
+      $("qLive").style.display = "block";
+    } else if (st.status !== "question") { curQ = null; $("qLive").style.display = "none"; }
+  }
+
+  function stageInfo(ev) {
+    $("stageBox").innerHTML = `<b>${esc(ev.title)}</b><span class="muted">${esc(ev.body).slice(0, 180)}</span>`;
+  }
+
+  // ---------------- roster / engagement ----------------
+  function renderRoster(students) {
+    $("rosterCount").textContent = students.length;
+    $("connBadge").textContent = `${students.length} students`;
+    const scored0 = students.length && students[0].score !== undefined;
+    setSum("sumStudents", !students.length
+      ? "Waiting for students to join..."
+      : scored0
+        ? `${students.length} in class - avg score ${Math.round(students.reduce((a, s) => a + s.score, 0) / students.length)}`
+        : `${students.length} joined - scores appear once the lesson runs`);
+    if (!students.length) {
+      $("rosterTable").querySelector("tbody").innerHTML =
+        `<tr><td colspan="7" class="muted">Waiting for students to join...</td></tr>`;
+      return;
+    }
+    const scored = students[0].score !== undefined;
+    $("rosterTable").querySelector("tbody").innerHTML = students.map(s => {
+      const badge = scored ? `<span class="badge badge-${s.color}">${s.score}</span>` : `<span class="badge badge-gray">-</span>`;
+      return `<tr>
+        <td><b>${esc(s.name)}</b></td>
+        <td>${scored ? s.attention : "-"}</td><td>${scored ? s.participation : "-"}</td>
+        <td>${scored ? s.quiz : "-"}</td><td>${scored ? s.speaking : "-"}</td>
+        <td>${badge}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm" title="Call on student" onclick="callOn(${s.student_id ?? s.id})">&#128227;</button>
+          <button class="btn btn-sm" title="Push an easy question to re-engage" onclick="pushQ(${s.student_id ?? s.id})">&#127919;</button>
+        </td></tr>`;
+    }).join("");
+  }
+  window.callOn = (id) => api("/api/call_on", { student_id: id }).catch(e => toast(e.message, "error"));
+  window.pushQ = (id) => api("/api/push_question", { student_id: id }).catch(e => toast(e.message, "error"));
+
+  // ---------------- speech log (STT) ----------------
+  let speechN = 0;
+  let speechInteracting = 0;
+  const KIND_BADGE = { answer: ["green", "spoken answer"], question: ["cyan", "question"],
+                       comment: ["gray", "comment"], chatter: ["yellow", "off-topic"] };
+  function addSpeech(ev) {
+    const first = $("speechLog").querySelector(".muted");
+    if (first) $("speechLog").innerHTML = "";
+    const [color, label] = KIND_BADGE[ev.kind] || ["gray", ev.kind];
+    $("speechLog").insertAdjacentHTML("afterbegin", `
+      <div class="askline">&#127908; <b>${esc(ev.name)}:</b> "${esc(ev.transcript)}"
+        <span class="badge badge-${color}" style="font-size:10px">${label}</span>
+        ${ev.interaction ? '<span class="badge badge-green" style="font-size:10px">interacting &#10003;</span>'
+                         : '<span class="badge badge-gray" style="font-size:10px">not interacting</span>'}
+      </div>`);
+    $("speechCount").textContent = ++speechN;
+    if (ev.interaction) speechInteracting++;
+    setSum("sumSpeech", `${speechN} captured &middot; <b>${speechInteracting}</b> interacting
+      &middot; last: "${esc(ev.transcript.slice(0, 34))}${ev.transcript.length > 34 ? "..." : ""}"`);
+  }
+  async function loadSpeechLog() {
+    try {
+      const rows = await api("/api/speechlog");
+      if (!rows.length) return;
+      $("speechLog").innerHTML = "";
+      speechN = 0;
+      rows.reverse().forEach(r => addSpeech(r));
+    } catch (e) { /* no session */ }
+  }
+
+  // ---------------- logs ----------------
+  let askN = 0;
+  let askRefused = 0;
+  function addAsk(ev) {
+    const first = $("askLog").querySelector(".muted");
+    if (first) $("askLog").innerHTML = "";
+    $("askLog").insertAdjacentHTML("afterbegin", `
+      <div class="askline">
+        <b>${esc(ev.student)}:</b> ${esc(ev.question)}<br />
+        <span class="${ev.on_topic ? "" : "muted"}">&#129302; ${esc(ev.answer)}</span>
+        <span class="badge ${ev.on_topic ? "badge-green" : "badge-yellow"}" style="font-size:10px">
+          ${ev.on_topic ? "on-topic" : "refused"}</span>
+      </div>`);
+    askN++;
+    if (!ev.on_topic) askRefused++;
+    setSum("sumAsk", `${askN} question${askN === 1 ? "" : "s"} &middot; ${askRefused} refused
+      &middot; last: "${esc(ev.question.slice(0, 34))}${ev.question.length > 34 ? "..." : ""}"`);
+  }
+  async function refreshEvents() {
+    try {
+      const evs = await api("/api/events");
+      $("eventLog").innerHTML = evs.length
+        ? evs.map(e => `<div class="logline"><span class="t">${fmtTime(e.ts)}</span><b>${esc(e.type)}</b> ${esc(e.detail)}</div>`).join("")
+        : `<div class="muted" style="font-size:13px">-</div>`;
+      setSum("sumLog", evs.length
+        ? `${evs.length} events - last: ${esc(evs[0].type)} (${fmtTime(evs[0].ts)})`
+        : "Nothing logged yet - start a lesson.");
+    } catch (e) { /* no session */ }
+  }
+  setInterval(refreshEvents, 6000);
+
+  async function refreshLLMStatus() {
+    try {
+      const s = await api("/api/llm/status");
+      const chip = $("llmChip");
+      if (s.mode === "local-llm") {
+        chip.textContent = `local LLM: ${s.model} (offline)`;
+        chip.className = "badge badge-green";
+      } else {
+        chip.textContent = "retrieval mode (no local LLM)";
+        chip.className = "badge badge-yellow";
+        chip.title = "Install Ollama + pull a model to enable offline LLM answers";
+      }
+    } catch (e) { /* ignore */ }
+  }
+  refreshLLMStatus();
+  setInterval(refreshLLMStatus, 30000);
+
+  // ---------------- websocket ----------------
+  connectWS("teacher", (ev) => {
+    switch (ev.type) {
+      case "state": applyState(ev); break;
+      case "stage": stageInfo(ev); break;
+      case "roster": renderRoster(ev.students); break;
+      case "engagement":
+        $("classScore").textContent = ev.class_score + "%";
+        $("classScore").style.color = ev.class_score >= 70 ? "var(--green)" : ev.class_score >= 45 ? "var(--yellow)" : "var(--red)";
+        $("classAtt").textContent = ev.class_attention + "%";
+        lastTimeline = ev.timeline;
+        drawTimeline($("timeline"), lastTimeline);
+        renderRoster(ev.students);
+        break;
+      case "autoface_state": autoFace = ev.enabled; renderAutoFace(); break;
+      case "speaker_state": serverSpeaker = ev.enabled; renderSpeaker(); break;
+      case "expression": setRobotExpr(ev.expression); break;
+      case "perception_mode": $("percMode").value = ev.mode; renderRobotSummary(); break;
+      case "autoadvance_state": autoAdv = ev.enabled; renderAutoAdv(); break;
+      case "schedule_update": renderSchedules(ev.schedules); break;
+      case "lessons_updated": loadLessons(); break;
+      case "ask": addAsk(ev); break;
+      case "speech": addSpeech(ev); break;
+      case "toast": toast(ev.text, ev.level); break;
+      case "question_open":
+        curQ = ev.question;
+        $("stageBox").innerHTML = `<b>&#10067; ${esc(ev.question.text)}</b>
+          <span class="muted">${ev.question.is_minigame ? "MINI-GAME - " : ""}collecting answers...</span>`;
+        $("qLive").style.display = "block";
+        break;
+      case "question_closed":
+        $("qLive").style.display = "none";
+        $("stageBox").innerHTML = `<b>&#9989; Results: ${ev.results.correct}/${ev.results.answers} correct</b>
+          <span class="muted">${esc(ev.results.explanation)}</span>`;
+        break;
+      case "question_tick": {
+        if (!curQ) break;
+        $("qAnswers").textContent = `${ev.answers}/${ev.students} answers`;
+        $("qTime").textContent = ev.remaining_s + "s left";
+        const bar = $("qBar");
+        bar.firstElementChild.style.width = (ev.remaining_s / curQ.time_limit) * 100 + "%";
+        bar.classList.toggle("low", ev.remaining_s <= 5);
+        break;
+      }
+      case "answer_received": $("qAnswers").textContent = `${ev.count}/${ev.total} answers`; break;
+      case "audio_event":
+        $("audioLoc").innerHTML = `&#127908; voice from <b>${esc(ev.event.zone)}</b> (${ev.event.azimuth_deg}&deg;) - ${esc(ev.event.name)}`;
+        break;
+    }
+  });
+
+  // ---------------- boot ----------------
+  (async () => {
+    await loadLessons();
+    const st = await api("/api/state");
+    applyState(st);
+    autoFace = st.auto_face !== false;
+    serverSpeaker = st.server_speaker !== false;
+    renderSpeaker();
+    if (st.robot_expression) robotExpr = st.robot_expression;
+    if (st.perception_mode) $("percMode").value = st.perception_mode;
+    renderAutoFace();
+    autoAdv = st.auto_advance === true;
+    renderAutoAdv();
+    renderSchedules(st.schedules || []);
+    if (st.students) renderRoster(st.students);
+    refreshEvents();
+    loadSpeechLog();
+    const a = await api("/api/analytics");
+    if (a.students.length) { renderRoster(a.students); drawTimeline($("timeline"), a.timeline); }
+  })();
+  window.addEventListener("resize", () => drawTimeline($("timeline"), lastTimeline));
+</script>
+</body>
+</html>

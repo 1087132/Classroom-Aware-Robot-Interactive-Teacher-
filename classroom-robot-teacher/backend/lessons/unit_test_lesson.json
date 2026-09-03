@@ -1,0 +1,52 @@
+{
+  "id": "unit_test_lesson",
+  "title": "Unit Test Lesson",
+  "subject": "Testing",
+  "questions": [
+    {
+      "id": "u1",
+      "text": "1+1?",
+      "options": [
+        "1",
+        "2"
+      ],
+      "answer": 1,
+      "time_limit": 30,
+      "difficulty": "easy",
+      "explanation": "",
+      "keywords": []
+    },
+    {
+      "id": "u2",
+      "text": "2+2?",
+      "options": [
+        "3",
+        "4"
+      ],
+      "answer": 1,
+      "time_limit": 30,
+      "difficulty": "easy",
+      "explanation": "",
+      "keywords": []
+    }
+  ],
+  "minigame": {
+    "title": "Quick",
+    "intro": "go",
+    "question_ids": [
+      "u2"
+    ]
+  },
+  "grade": "",
+  "topic_label": "Unit Test Lesson",
+  "duration_min": 20,
+  "greeting": "Hello class! I am CAT. Today's lesson is Unit Test Lesson. Let's begin!",
+  "closing": "That's all for today. Great job, everyone!",
+  "knowledge_base": [],
+  "flow": [
+    {
+      "type": "question",
+      "question_id": "u1"
+    }
+  ]
+}
